@@ -9,6 +9,7 @@ export interface Stone {
 export interface Game {
   black: Stone[];
   white: Stone[];
+  toPlay: 'Black' | 'White';
 }
 
 function parseCoordinate(coord: string): Stone | null {
@@ -20,31 +21,6 @@ function parseCoordinate(coord: string): Stone | null {
   if (isNaN(numberPart)) return null;
 
   let x = letterPart.charCodeAt(0) - 'A'.charCodeAt(0);
-  if (letterPart >= 'I') {
-     // 'I' is skipped in standard Go notation usually, but let's check the input.
-     // Input has 'J'. 
-     // Usually A=1...H=8, J=9.
-     // If input follows this, then we need to adjust.
-     // If input strictly uses A-S (19 letters) including I, we don't adjust.
-     // Given standard Go, I is skipped.
-     if (letterPart > 'I') { // J is after I
-         x--;
-     } else if (letterPart === 'I') {
-         // If we see 'I', maybe it's not skipped in this file?
-         // But standard is skip. Let's assume skip unless we see 'I'.
-         // If 'I' is present, we treat it as a column.
-     }
-  }
-  // Wait, standard algorithm:
-  // if (char >= 'J') x--; 
-  // Because 'I' (index 8) is skipped. 'J' (index 9) becomes 8.
-  // Input: 'J17'. J is 74. A is 65. 74-65 = 9.
-  // If we skip I, J should be column 8 (0-indexed).
-  // So yes, if char >= 'J', x--.
-  
-  // However, I should check if 'I' ever appears in the input.
-  // The input has 'J17'. It doesn't seem to have 'I'.
-  // I will assume standard Go notation (skip I).
   if (letterPart >= 'J') {
       x--;
   }
@@ -70,11 +46,13 @@ export async function getGames(): Promise<Game[]> {
     if (lines.length < 2) {
         // Fallback or error?
         // Let's try to parse what we have.
-        return { black: [], white: [] };
+        return { black: [], white: [], toPlay: 'Black' };
     }
 
     const line1 = lines[0]; // Black
     const line2 = lines[1]; // White
+
+    const toPlay = line1.includes('___') ? 'Black' : 'White';
 
     const parseLine = (line: string) => {
         return line.split(/\s+/).map(parseCoordinate).filter((s): s is Stone => s !== null);
@@ -83,6 +61,7 @@ export async function getGames(): Promise<Game[]> {
     return {
         black: parseLine(line1),
         white: parseLine(line2),
+        toPlay,
     };
   });
 

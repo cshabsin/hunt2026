@@ -59,6 +59,11 @@ export default function GameViewer({ games }: GameViewerProps) {
             Game {index + 1} of {games.length}
         </div>
         
+        <div className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+          <div className={`w-4 h-4 rounded-full border border-black ${currentGame.toPlay === 'Black' ? 'bg-black' : 'bg-white'}`} />
+          {currentGame.toPlay} to play
+        </div>
+        
         <p className="text-sm text-gray-500">
             Use Left/Right Arrow keys to navigate
         </p>
