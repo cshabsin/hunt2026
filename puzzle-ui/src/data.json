@@ -1,0 +1,401 @@
+[
+  {
+    "id": 0,
+    "original": "[",
+    "text": "",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 1,
+    "original": "Declaration in a [",
+    "text": "Declaration in a ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 2,
+    "original": "Domain for Carlsen or Gukesh",
+    "text": "Domain for Carlsen or Gukesh",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 3,
+    "original": "] game",
+    "text": " game",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 4,
+    "original": "] [",
+    "text": " ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 5,
+    "original": "Items that get distributed by a [",
+    "text": "Items that get distributed by a ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 6,
+    "original": "Job for Gordon Krantz or Pat Clifton",
+    "text": "Job for Gordon Krantz or Pat Clifton",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 7,
+    "original": "]] [[",
+    "text": " ",
+    "left": "]]",
+    "right": "[["
+  },
+  {
+    "id": 8,
+    "original": "Adam who notably sang \"[",
+    "text": "Adam who notably sang \"",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 9,
+    "original": "Beetles that are also commonly known as \"[",
+    "text": "Beetles that are also commonly known as \"",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 10,
+    "original": "Racer [",
+    "text": "Racer ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 11,
+    "original": "Fashion designer Alexander who hailed from London",
+    "text": "Fashion designer Alexander who hailed from London",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 12,
+    "original": "] once deemed \"not the GOAT\" on ESPN",
+    "text": " once deemed \"not the GOAT\" on ESPN",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 13,
+    "original": "] bugs\"",
+    "text": " bugs\"",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 14,
+    "original": "]\"",
+    "text": "\"",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 15,
+    "original": "] [",
+    "text": " ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 16,
+    "original": "Lower one's head, evasively",
+    "text": "Lower one's head, evasively",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 17,
+    "original": "]'s [",
+    "text": "'s ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 18,
+    "original": "Word that might precede [",
+    "text": "Word that might precede ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 19,
+    "original": "What [[",
+    "text": "What ",
+    "left": null,
+    "right": "[["
+  },
+  {
+    "id": 20,
+    "original": "Fruit wasps pollinate",
+    "text": "Fruit wasps pollinate",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 21,
+    "original": "] [",
+    "text": " ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 22,
+    "original": "Toss, as a [",
+    "text": "Toss, as a ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 23,
+    "original": "Kick the bucket",
+    "text": "Kick the bucket",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 24,
+    "original": "]] snacks currently produced by Nabisco",
+    "text": " snacks currently produced by Nabisco",
+    "left": "]]",
+    "right": null
+  },
+  {
+    "id": 25,
+    "original": "] measure, or [",
+    "text": " measure, or ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 26,
+    "original": "Times [",
+    "text": "Times ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 27,
+    "original": "Opposite of old",
+    "text": "Opposite of old",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 28,
+    "original": "] Roman, e.g.",
+    "text": " Roman, e.g.",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 29,
+    "original": "] boldness",
+    "text": " boldness",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 30,
+    "original": "] or [",
+    "text": " or ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 31,
+    "original": "Intracranial organ that generates [",
+    "text": "Intracranial organ that generates ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 32,
+    "original": "\"It's the ___ that [",
+    "text": "\"It's the ___ that ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 33,
+    "original": "Enumerates, like with these clues' lengths",
+    "text": "Enumerates, like with these clues' lengths",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 34,
+    "original": "]\" (idiomatic saying)",
+    "text": "\" (idiomatic saying)",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 35,
+    "original": "]]ed",
+    "text": "ed",
+    "left": "]]",
+    "right": null
+  },
+  {
+    "id": 36,
+    "original": "] coating",
+    "text": " coating",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 37,
+    "original": "] [[",
+    "text": " ",
+    "left": "]",
+    "right": "[["
+  },
+  {
+    "id": 38,
+    "original": "Award category you might find in a high school student's yearbook (11)",
+    "text": "Award category you might find in a high school student's yearbook (11)",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 39,
+    "original": "] that's associated with the [",
+    "text": " that's associated with the ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 40,
+    "original": "Popova who represented her country at [",
+    "text": "Popova who represented her country at ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 41,
+    "original": "Contest whose 2025 iteration featured participants from 37 different countries",
+    "text": "Contest whose 2025 iteration featured participants from 37 different countries",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 42,
+    "original": "]] [",
+    "text": " ",
+    "left": "]]",
+    "right": "["
+  },
+  {
+    "id": 43,
+    "original": "Word that precedes warfare or coat",
+    "text": "Word that precedes warfare or coat",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 44,
+    "original": "]] [[",
+    "text": " ",
+    "left": "]]",
+    "right": "[["
+  },
+  {
+    "id": 45,
+    "original": "It's [",
+    "text": "It's ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 46,
+    "original": "Child's declaration of ownership",
+    "text": "Child's declaration of ownership",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 47,
+    "original": "]d or [",
+    "text": "d or ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 48,
+    "original": "Ab exercise performed on one's back",
+    "text": "Ab exercise performed on one's back",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 49,
+    "original": "]ed",
+    "text": "ed",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 50,
+    "original": "] structure taught alongside [",
+    "text": " structure taught alongside ",
+    "left": "]",
+    "right": "["
+  },
+  {
+    "id": 51,
+    "original": "Wait one's turn in [",
+    "text": "Wait one's turn in ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 52,
+    "original": "It's [",
+    "text": "It's ",
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 53,
+    "original": "Toddler's \"little piggy\"",
+    "text": "Toddler's \"little piggy\"",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 54,
+    "original": "]d or held",
+    "text": "d or held",
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 55,
+    "original": "]]s",
+    "text": "s",
+    "left": "]]",
+    "right": null
+  },
+  {
+    "id": 56,
+    "original": "]",
+    "text": "",
+    "left": "]",
+    "right": null
+  }
+]
