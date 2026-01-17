@@ -52,17 +52,20 @@ export function parsePuzzle(pieces: any[]): ClueNode {
 
     // 3. Handle Opening Brackets (Push Nodes)
     for (let i = 0; i < pushCount; i++) {
+        // Always get the latest node from the stack to ensure nesting
+        const activeNode = stack[stack.length - 1];
+
         const newNode: ClueNode = {
             id: `node-${piece.id}-${i}`,
-            type: (pushCount === 2 && i === 0) ? 'double' : 'single',
+            type: 'single', // Treat all as single layers of nesting
             segments: [],
             answer: '',
             isLeaf: true
         };
         
-        // Add to current
-        current.segments.push(newNode);
-        // Push to stack
+        // Add to the currently active node
+        activeNode.segments.push(newNode);
+        // Push the new node to the stack so the next one (if any) nests inside it
         stack.push(newNode);
     }
   });
