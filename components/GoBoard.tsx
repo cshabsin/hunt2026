@@ -3,11 +3,12 @@ import { Game } from '@/lib/games';
 
 interface GoBoardProps {
   game: Game;
+  onIntersectionClick?: (x: number, y: number) => void;
 }
 
 const BOARD_SIZE = 19;
 
-export default function GoBoard({ game }: GoBoardProps) {
+export default function GoBoard({ game, onIntersectionClick }: GoBoardProps) {
   // Grid lines
   const lines: React.ReactNode[] = [];
   for (let i = 0; i < BOARD_SIZE; i++) {
@@ -53,6 +54,26 @@ export default function GoBoard({ game }: GoBoardProps) {
     });
   });
 
+  // Click targets
+  const clickTargets: React.ReactNode[] = [];
+  if (onIntersectionClick) {
+    for (let x = 0; x < BOARD_SIZE; x++) {
+      for (let y = 0; y < BOARD_SIZE; y++) {
+        clickTargets.push(
+          <circle
+            key={`click-${x}-${y}`}
+            cx={x}
+            cy={y}
+            r={0.45}
+            fill="transparent"
+            onClick={() => onIntersectionClick(x, y)}
+            className="cursor-pointer hover:fill-black/10"
+          />
+        );
+      }
+    }
+  }
+
   return (
     <div className="w-full max-w-2xl aspect-square bg-[#eebb66] p-4 rounded-lg shadow-lg">
       <svg
@@ -86,6 +107,9 @@ export default function GoBoard({ game }: GoBoardProps) {
             strokeWidth="0.03"
           />
         ))}
+        
+        {/* Click Overlay */}
+        {clickTargets}
       </svg>
     </div>
   );

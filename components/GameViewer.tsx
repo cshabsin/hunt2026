@@ -14,11 +14,13 @@ export default function GameViewer({ games }: GameViewerProps) {
   const [index, setIndex] = useState(0);
   const [golMode, setGolMode] = useState<'Black' | 'White' | null>(null);
   const [golCells, setGolCells] = useState<Stone[]>([]);
+  const [nextMove, setNextMove] = useState<Stone | null>(null);
 
   // Reset GOL when changing games
   const handleIndexChange = useCallback((newIndex: number) => {
       setIndex(newIndex);
       setGolMode(null);
+      setNextMove(null);
   }, []);
 
   useEffect(() => {
@@ -45,11 +47,39 @@ export default function GameViewer({ games }: GameViewerProps) {
   const startGameOfLife = (color: 'Black' | 'White') => {
       if (golMode === color) {
           setGolMode(null);
+          // If we stop, we might want to keep the nextMove? Or reset?
+          // Resetting nextMove is safest as the board state is reset.
+          setNextMove(null);
           return;
       }
-      const initialCells = color === 'Black' ? games[index].black : games[index].white;
+      
+      const baseCells = color === 'Black' ? games[index].black : games[index].white;
+      let initialCells = [...baseCells];
+      
+      // Include the next move if it matches the color being played
+      if (nextMove && games[index].toPlay === color) {
+          initialCells.push(nextMove);
+      }
+      
       setGolCells(initialCells);
       setGolMode(color);
+  };
+  
+  const handleBoardClick = (x: number, y: number) => {
+      if (golMode) return;
+      
+      const isOccupied = 
+          games[index].black.some(s => s.x === x && s.y === y) ||
+          games[index].white.some(s => s.x === x && s.y === y);
+      
+      if (isOccupied) return;
+      
+      // If clicking the same spot, remove it? Optional. Let's just move it.
+      if (nextMove && nextMove.x === x && nextMove.y === y) {
+          setNextMove(null);
+      } else {
+          setNextMove({ x, y });
+      }
   };
 
   if (games.length === 0) {
@@ -58,12 +88,30 @@ export default function GameViewer({ games }: GameViewerProps) {
 
   const baseGame = games[index];
   
-  // If GOL is active, construct a transient Game object
-  const displayGame: Game = golMode ? {
-      black: golMode === 'Black' ? golCells : [],
-      white: golMode === 'White' ? golCells : [],
-      toPlay: baseGame.toPlay
-  } : baseGame;
+  let displayGame: Game;
+  
+  if (golMode) {
+      displayGame = {
+          black: golMode === 'Black' ? golCells : [],
+          white: golMode === 'White' ? golCells : [],
+          toPlay: baseGame.toPlay
+      };
+  } else {
+      // Add nextMove to the appropriate list for display
+      const black = [...baseGame.black];
+      const white = [...baseGame.white];
+      
+      if (nextMove) {
+          if (baseGame.toPlay === 'Black') black.push(nextMove);
+          else white.push(nextMove);
+      }
+      
+      displayGame = {
+          black,
+          white,
+          toPlay: baseGame.toPlay
+      };
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
@@ -78,7 +126,7 @@ export default function GameViewer({ games }: GameViewerProps) {
                 <ChevronLeft size={32} />
             </button>
             
-            <GoBoard game={displayGame} />
+            <GoBoard game={displayGame} onIntersectionClick={handleBoardClick} />
 
             <button
                 onClick={() => handleIndexChange(Math.min(games.length - 1, index + 1))}
