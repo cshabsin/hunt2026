@@ -122,7 +122,16 @@ function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: {
           const text = seg.trim();
           if (!text) return null;
           return (
-            <span key={i} className="font-serif text-sm whitespace-pre-wrap">
+            <span 
+              key={i} 
+              className={`font-serif text-sm whitespace-pre-wrap ${hasAnswer ? 'cursor-pointer hover:opacity-80' : ''}`}
+              onClick={(e) => {
+                if (hasAnswer) {
+                  e.stopPropagation();
+                  setIsExpanded(false);
+                }
+              }}
+            >
               {text}
             </span>
           );
