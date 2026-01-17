@@ -16,6 +16,11 @@ export default function GameViewer({ games }: GameViewerProps) {
   const [golCells, setGolCells] = useState<Stone[]>([]);
   const [nextMove, setNextMove] = useState<Stone | null>(null);
   const [generation, setGeneration] = useState(0);
+  const golCellsRef = React.useRef(golCells);
+
+  useEffect(() => {
+      golCellsRef.current = golCells;
+  }, [golCells]);
 
   // Reset GOL when changing games
   const handleIndexChange = useCallback((newIndex: number) => {
@@ -41,20 +46,19 @@ export default function GameViewer({ games }: GameViewerProps) {
   useEffect(() => {
       if (!golMode) return;
       const interval = setInterval(() => {
-          setGolCells(prev => {
-              const next = nextGeneration(prev);
-              
-              // Check for stability
-              const prevSet = new Set(prev.map(s => `${s.x},${s.y}`));
-              const nextSet = new Set(next.map(s => `${s.x},${s.y}`));
-              
-              if (prevSet.size === nextSet.size && [...prevSet].every(s => nextSet.has(s))) {
-                  return prev; // Stop updating if stable
-              }
-              
-              setGeneration(g => g + 1);
-              return next;
-          });
+          const prev = golCellsRef.current;
+          const next = nextGeneration(prev);
+          
+          // Check for stability
+          const prevSet = new Set(prev.map(s => `${s.x},${s.y}`));
+          const nextSet = new Set(next.map(s => `${s.x},${s.y}`));
+          
+          if (prevSet.size === nextSet.size && [...prevSet].every(s => nextSet.has(s))) {
+              return; // Stop updating if stable
+          }
+          
+          setGolCells(next);
+          setGeneration(g => g + 1);
       }, 200);
       return () => clearInterval(interval);
   }, [golMode]);
