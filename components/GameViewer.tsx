@@ -15,12 +15,14 @@ export default function GameViewer({ games }: GameViewerProps) {
   const [golMode, setGolMode] = useState<'Black' | 'White' | null>(null);
   const [golCells, setGolCells] = useState<Stone[]>([]);
   const [nextMove, setNextMove] = useState<Stone | null>(null);
+  const [generation, setGeneration] = useState(0);
 
   // Reset GOL when changing games
   const handleIndexChange = useCallback((newIndex: number) => {
       setIndex(newIndex);
       setGolMode(null);
       setNextMove(null);
+      setGeneration(0);
   }, []);
 
   useEffect(() => {
@@ -39,7 +41,20 @@ export default function GameViewer({ games }: GameViewerProps) {
   useEffect(() => {
       if (!golMode) return;
       const interval = setInterval(() => {
-          setGolCells(prev => nextGeneration(prev));
+          setGolCells(prev => {
+              const next = nextGeneration(prev);
+              
+              // Check for stability
+              const prevSet = new Set(prev.map(s => `${s.x},${s.y}`));
+              const nextSet = new Set(next.map(s => `${s.x},${s.y}`));
+              
+              if (prevSet.size === nextSet.size && [...prevSet].every(s => nextSet.has(s))) {
+                  return prev; // Stop updating if stable
+              }
+              
+              setGeneration(g => g + 1);
+              return next;
+          });
       }, 200);
       return () => clearInterval(interval);
   }, [golMode]);
@@ -50,6 +65,7 @@ export default function GameViewer({ games }: GameViewerProps) {
           // If we stop, we might want to keep the nextMove? Or reset?
           // Resetting nextMove is safest as the board state is reset.
           setNextMove(null);
+          setGeneration(0);
           return;
       }
       
@@ -63,6 +79,7 @@ export default function GameViewer({ games }: GameViewerProps) {
       
       setGolCells(initialCells);
       setGolMode(color);
+      setGeneration(0);
   };
   
   const handleBoardClick = (x: number, y: number) => {
@@ -170,6 +187,12 @@ export default function GameViewer({ games }: GameViewerProps) {
                 {golMode === 'White' ? 'Stop GOL (White)' : 'Play GOL White'}
             </button>
         </div>
+        
+        {golMode && (
+            <div className="text-lg font-semibold text-gray-700">
+                Generation: {generation}
+            </div>
+        )}
         
         <p className="text-sm text-gray-500">
             Use Left/Right Arrow keys to navigate
