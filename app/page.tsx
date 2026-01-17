@@ -71,10 +71,12 @@ const GraphViewer = () => {
             if (obj.fillcolor) background = obj.fillcolor;
             else if (obj.style && obj.style.includes('filled')) background = 'lightblue'; // Default from your dot file
 
+            const label = (obj.label && obj.label !== '\\N') ? obj.label : obj.name;
+
             return {
               id: obj.name,
               position: { x, y },
-              data: { label: obj.label || obj.name },
+              data: { label: label },
               style: { 
                 backgroundColor: background,
                 border: '1px solid #777',
@@ -82,6 +84,10 @@ const GraphViewer = () => {
                 padding: '10px',
                 width: 100, // Approximate width
                 textAlign: 'center',
+                color: '#000', // Force black text
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
               },
             };
           });
