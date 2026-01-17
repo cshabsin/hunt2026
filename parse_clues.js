@@ -1,41 +1,45 @@
 const fs = require('fs');
 const path = require('path');
 
-const clues = fs.readFileSync('clues.txt', 'utf8').split('\n').filter(line => line.length > 0);
+const lines = fs.readFileSync('clues.txt', 'utf8').split('\n').filter(l => l.length > 0);
 
-const pieces = clues.map((line, index) => {
-  let text = line;
-  let left = null;
-  let right = null;
+const pieces = [];
+let idCounter = 0;
 
-  // Check for Left connectors (start of string)
-  if (text.startsWith(']]')) {
-    left = ']]';
-    text = text.substring(2);
-  } else if (text.startsWith(']')) {
-    left = ']';
-    text = text.substring(1);
-  }
+lines.forEach((line, lineIndex) => {
+  // Split by brackets, capturing the brackets
+  // Match [[ or ]] first (longest match)
+  const tokens = line.split(/(\[\[|\]\]|\[|\])/);
 
-  // Check for Right connectors (end of string)
-  if (text.endsWith('[[')) {
-    right = '[[';
-    text = text.substring(0, text.length - 2);
-  } else if (text.endsWith('[')) {
-    right = '[';
-    text = text.substring(0, text.length - 1);
-  }
+  tokens.forEach(token => {
+    if (!token) return;
 
-  return {
-    id: index,
-    original: line,
-    text: text,
-    left: left,
-    right: right
-  };
+    const piece = {
+      id: idCounter++,
+      originalLine: lineIndex,
+      text: null,
+      left: null,
+      right: null
+    };
+
+    if (token === '[') {
+      piece.right = '[';
+    } else if (token === '[[') {
+      piece.right = '[[';
+    } else if (token === ']') {
+      piece.left = ']';
+    } else if (token === ']]') {
+      piece.left = ']]';
+    } else {
+      // It's text
+      piece.text = token;
+    }
+
+    pieces.push(piece);
+  });
 });
 
 const outputPath = path.join('puzzle-ui', 'src', 'data.json');
 fs.writeFileSync(outputPath, JSON.stringify(pieces, null, 2));
 
-console.log(`Parsed ${pieces.length} pieces. Saved to ${outputPath}`);
+console.log(`Parsed ${pieces.length} pieces from ${lines.length} lines. Saved to ${outputPath}`);

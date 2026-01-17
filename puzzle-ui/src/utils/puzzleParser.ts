@@ -8,7 +8,12 @@ export interface ClueNode {
   isLeaf: boolean; // True if it has no children (only text)
 }
 
-export function parsePuzzle(pieces: any[]): ClueNode {
+export interface ParseResult {
+  root: ClueNode;
+  initialAnswers: Record<string, string>;
+}
+
+export function parsePuzzle(pieces: any[]): ParseResult {
   const root: ClueNode = {
     id: 'root',
     type: 'root',
@@ -17,6 +22,7 @@ export function parsePuzzle(pieces: any[]): ClueNode {
     isLeaf: false
   };
 
+  const initialAnswers: Record<string, string> = {};
   const stack: ClueNode[] = [root];
 
   pieces.forEach((piece, index) => {
@@ -25,9 +31,10 @@ export function parsePuzzle(pieces: any[]): ClueNode {
     if (piece.left === ']') popCount = 1;
     if (piece.left === ']]') popCount = 2;
 
+    let lastPoppedNode: ClueNode | null = null;
     for (let i = 0; i < popCount; i++) {
       if (stack.length > 1) { // Never pop root
-        stack.pop();
+        lastPoppedNode = stack.pop() || null;
       }
     }
 
@@ -35,19 +42,42 @@ export function parsePuzzle(pieces: any[]): ClueNode {
 
     // Determine Push Count (Right side)
     let pushCount = 0;
-    let type: 'single' | 'double' = 'single';
-    
     if (piece.right === '[') {
       pushCount = 1;
-      type = 'single';
     } else if (piece.right === '[[') {
       pushCount = 2; 
-      type = 'double';
     }
 
     // 2. Add Text Segment
     if (piece.text) {
-      current.segments.push(piece.text);
+      // Check for pre-populated answer pattern ": WORD"
+      let textContent = piece.text;
+      const match = textContent.match(/(:|:) ([A-Z]+)$/);
+      // Regex check: Ends with ": WORD".
+      
+      if (match) {
+        const answer = match[2];
+        const fullMatch = match[0]; // e.g. ": ANSWER"
+        
+        // Determine target:
+        // If the text is JUST the answer (e.g. " : ANSWER" or ": ANSWER")
+        // AND we just popped a node (meaning this answer sits immediately after a closing bracket)
+        // THEN it likely belongs to the node we just closed.
+        const isJustAnswer = textContent.trim() === fullMatch.trim();
+        
+        if (isJustAnswer && lastPoppedNode) {
+             initialAnswers[lastPoppedNode.id] = answer;
+             textContent = ""; // Remove the text entirely as it was just the answer
+        } else {
+             // Otherwise it belongs to the current parent context
+             initialAnswers[current.id] = answer;
+             textContent = textContent.substring(0, match.index); 
+        }
+      }
+
+      if (textContent) {
+        current.segments.push(textContent);
+      }
     }
 
     // 3. Handle Opening Brackets (Push Nodes)
@@ -70,5 +100,5 @@ export function parsePuzzle(pieces: any[]): ClueNode {
     }
   });
 
-  return root;
+  return { root, initialAnswers };
 }

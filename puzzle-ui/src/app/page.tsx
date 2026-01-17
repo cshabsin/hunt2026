@@ -19,11 +19,11 @@ const DEPTH_COLORS = [
 ];
 
 export default function Home() {
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-
-  const root = useMemo(() => {
+  const { root, initialAnswers } = useMemo(() => {
     return parsePuzzle(initialData);
   }, []);
+
+  const [answers, setAnswers] = useState<Record<string, string>>(initialAnswers);
 
   const handleAnswerChange = (id: string, value: string) => {
     setAnswers(prev => ({
@@ -146,7 +146,10 @@ function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: {
       <input 
         type="text" 
         value={answer || ''}
-        onChange={(e) => onAnswerChange(node.id, e.target.value)}
+        onChange={(e) => {
+          onAnswerChange(node.id, e.target.value);
+          setIsExpanded(true);
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && hasAnswer) {
             setIsExpanded(false);
