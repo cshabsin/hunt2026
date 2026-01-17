@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Game } from '@/lib/games';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Game, Stone } from '@/lib/games';
 import GoBoard from './GoBoard';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Square } from 'lucide-react';
+import { nextGeneration } from '@/lib/gameOfLife';
 
 interface GameViewerProps {
   games: Game[];
@@ -11,25 +12,58 @@ interface GameViewerProps {
 
 export default function GameViewer({ games }: GameViewerProps) {
   const [index, setIndex] = useState(0);
+  const [golMode, setGolMode] = useState<'Black' | 'White' | null>(null);
+  const [golCells, setGolCells] = useState<Stone[]>([]);
+
+  // Reset GOL when changing games
+  const handleIndexChange = useCallback((newIndex: number) => {
+      setIndex(newIndex);
+      setGolMode(null);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
-        setIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        handleIndexChange(index > 0 ? index - 1 : index);
       } else if (e.key === 'ArrowRight') {
-        setIndex((prev) => (prev < games.length - 1 ? prev + 1 : prev));
+        handleIndexChange(index < games.length - 1 ? index + 1 : index);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [games.length]);
+  }, [games.length, index, handleIndexChange]);
+
+  useEffect(() => {
+      if (!golMode) return;
+      const interval = setInterval(() => {
+          setGolCells(prev => nextGeneration(prev));
+      }, 200);
+      return () => clearInterval(interval);
+  }, [golMode]);
+
+  const startGameOfLife = (color: 'Black' | 'White') => {
+      if (golMode === color) {
+          setGolMode(null);
+          return;
+      }
+      const initialCells = color === 'Black' ? games[index].black : games[index].white;
+      setGolCells(initialCells);
+      setGolMode(color);
+  };
 
   if (games.length === 0) {
     return <div>No games found.</div>;
   }
 
-  const currentGame = games[index];
+  const baseGame = games[index];
+  
+  // If GOL is active, construct a transient Game object
+  const displayGame: Game = golMode ? {
+      black: golMode === 'Black' ? golCells : [],
+      white: golMode === 'White' ? golCells : [],
+      toPlay: baseGame.toPlay
+  } : baseGame;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
@@ -37,17 +71,17 @@ export default function GameViewer({ games }: GameViewerProps) {
         
         <div className="flex items-center gap-4">
             <button
-                onClick={() => setIndex((prev) => Math.max(0, prev - 1))}
+                onClick={() => handleIndexChange(Math.max(0, index - 1))}
                 disabled={index === 0}
                 className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 transition"
             >
                 <ChevronLeft size={32} />
             </button>
             
-            <GoBoard game={currentGame} />
+            <GoBoard game={displayGame} />
 
             <button
-                onClick={() => setIndex((prev) => Math.min(games.length - 1, prev + 1))}
+                onClick={() => handleIndexChange(Math.min(games.length - 1, index + 1))}
                 disabled={index === games.length - 1}
                 className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 transition"
             >
@@ -60,8 +94,33 @@ export default function GameViewer({ games }: GameViewerProps) {
         </div>
         
         <div className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-          <div className={`w-4 h-4 rounded-full border border-black ${currentGame.toPlay === 'Black' ? 'bg-black' : 'bg-white'}`} />
-          {currentGame.toPlay} to play
+          <div className={`w-4 h-4 rounded-full border border-black ${baseGame.toPlay === 'Black' ? 'bg-black' : 'bg-white'}`} />
+          {baseGame.toPlay} to play
+        </div>
+
+        <div className="flex gap-4">
+            <button
+                onClick={() => startGameOfLife('Black')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${
+                    golMode === 'Black' 
+                    ? 'bg-red-500 text-white hover:bg-red-600' 
+                    : 'bg-black text-white hover:bg-gray-800'
+                }`}
+            >
+                {golMode === 'Black' ? <Square size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
+                {golMode === 'Black' ? 'Stop GOL (Black)' : 'Play GOL Black'}
+            </button>
+            <button
+                onClick={() => startGameOfLife('White')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium border border-gray-300 transition ${
+                     golMode === 'White'
+                     ? 'bg-red-500 text-white border-red-500 hover:bg-red-600'
+                     : 'bg-white text-gray-800 hover:bg-gray-50'
+                }`}
+            >
+                {golMode === 'White' ? <Square size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
+                {golMode === 'White' ? 'Stop GOL (White)' : 'Play GOL White'}
+            </button>
         </div>
         
         <p className="text-sm text-gray-500">
