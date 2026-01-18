@@ -29,13 +29,14 @@ export default function Home() {
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !dragStartRef.current) return;
 
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
+    const { startX, startY, x: initialMouseX, y: initialMouseY } = dragStartRef.current;
+    const dx = e.clientX - initialMouseX;
+    const dy = e.clientY - initialMouseY;
 
     setTransform((prev) => ({
       ...prev,
-      x: dragStartRef.current!.startX + dx,
-      y: dragStartRef.current!.startY + dy,
+      x: startX + dx,
+      y: startY + dy,
     }));
   };
 
