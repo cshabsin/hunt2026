@@ -1,65 +1,231 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
 
 export default function Home() {
+  const [transform, setTransform] = useState({
+    x: 0,
+    y: 0,
+    rotate: 0,
+    scale: 1,
+    opacity: 0.7,
+  });
+
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ x: number; y: number; startX: number; startY: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      startX: transform.x,
+      startY: transform.y,
+    };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !dragStartRef.current) return;
+
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+
+    setTransform((prev) => ({
+      ...prev,
+      x: dragStartRef.current!.startX + dx,
+      y: dragStartRef.current!.startY + dy,
+    }));
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    dragStartRef.current = null;
+  };
+
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+        dragStartRef.current = null;
+      }
+    };
+    window.addEventListener("mouseup", handleGlobalMouseUp);
+    return () => window.removeEventListener("mouseup", handleGlobalMouseUp);
+  }, [isDragging]);
+
+  const handleChange = (key: keyof typeof transform, value: number) => {
+    setTransform((prev) => ({ ...prev, [key]: value }));
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div
+      className="flex min-h-screen bg-gray-100 overflow-hidden"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Sidebar Controls */}
+      <div className="w-80 bg-white shadow-lg p-6 flex flex-col gap-6 z-10 overflow-y-auto border-r border-gray-200">
+        <h1 className="text-xl font-bold text-gray-800">Map Overlay Tool</h1>
+        
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Translate X (px)</label>
+            <div className="flex gap-2">
+              <input
+                type="range"
+                min="-1000"
+                max="1000"
+                value={transform.x}
+                onChange={(e) => handleChange("x", Number(e.target.value))}
+                className="w-full"
+              />
+              <input
+                type="number"
+                value={Math.round(transform.x)}
+                onChange={(e) => handleChange("x", Number(e.target.value))}
+                className="w-20 p-1 border rounded text-sm text-black"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Translate Y (px)</label>
+            <div className="flex gap-2">
+              <input
+                type="range"
+                min="-1000"
+                max="1000"
+                value={transform.y}
+                onChange={(e) => handleChange("y", Number(e.target.value))}
+                className="w-full"
+              />
+              <input
+                type="number"
+                value={Math.round(transform.y)}
+                onChange={(e) => handleChange("y", Number(e.target.value))}
+                className="w-20 p-1 border rounded text-sm text-black"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Rotation (deg)</label>
+            <div className="flex gap-2">
+              <input
+                type="range"
+                min="-180"
+                max="180"
+                step="0.1"
+                value={transform.rotate}
+                onChange={(e) => handleChange("rotate", Number(e.target.value))}
+                className="w-full"
+              />
+              <input
+                type="number"
+                value={transform.rotate}
+                onChange={(e) => handleChange("rotate", Number(e.target.value))}
+                className="w-20 p-1 border rounded text-sm text-black"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Scale</label>
+            <div className="flex gap-2">
+              <input
+                type="range"
+                min="0.1"
+                max="5"
+                step="0.01"
+                value={transform.scale}
+                onChange={(e) => handleChange("scale", Number(e.target.value))}
+                className="w-full"
+              />
+              <input
+                type="number"
+                step="0.01"
+                value={transform.scale}
+                onChange={(e) => handleChange("scale", Number(e.target.value))}
+                className="w-20 p-1 border rounded text-sm text-black"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Opacity</label>
+            <div className="flex gap-2">
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={transform.opacity}
+                onChange={(e) => handleChange("opacity", Number(e.target.value))}
+                className="w-full"
+              />
+              <span className="w-12 text-sm text-gray-600 text-right">
+                {Math.round(transform.opacity * 100)}%
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <div className="p-4 bg-gray-50 rounded border border-gray-200">
+          <h3 className="font-semibold mb-2 text-gray-800">Current Parameters:</h3>
+          <pre className="text-xs overflow-auto bg-gray-100 p-2 rounded text-gray-700">
+            {JSON.stringify(transform, null, 2)}
+          </pre>
+        </div>
+        
+        <p className="text-xs text-gray-500 mt-auto">
+          Tip: You can drag the overlay directly with your mouse.
+        </p>
+      </div>
+
+      {/* Map Area */}
+      <div 
+        ref={containerRef}
+        className="flex-1 relative overflow-hidden bg-gray-200 cursor-grab active:cursor-grabbing flex items-center justify-center"
+      >
+        <div className="relative inline-block border border-gray-400 shadow-2xl bg-white">
+          {/* Base Map */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="/mit_campus.png" 
+            alt="MIT Campus Map" 
+            className="block max-w-none pointer-events-none select-none"
+            style={{ maxHeight: "90vh", maxWidth: "none" }} // Let it be large, scrollable if needed? Actually let's constrain it to fit view or be scrollable?
+            // The user said "find the right fit", implying the map is the reference.
+            // Let's just display the map as is. If it's huge, maybe we want pan/zoom on the map too?
+            // For now, let's assume the map is static and we move the overlay. 
+            // Better to have the map fit or be scrollable.
+          />
+          
+          {/* Overlay */}
+          <div
+            className="absolute top-0 left-0 origin-center cursor-move"
+            style={{
+              transform: `translate(${transform.x}px, ${transform.y}px) rotate(${transform.rotate}deg) scale(${transform.scale})`,
+              opacity: transform.opacity,
+              width: "100%", // Initial assumption, but svg might have its own size
+              height: "100%", 
+              // We need the overlay to be unconstrained so it can move anywhere. 
+              // Actually, putting it absolute top-0 left-0 means it starts aligned with the map.
+            }}
+            onMouseDown={handleMouseDown}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+             {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img 
+              src="/overlay.svg" 
+              alt="Overlay"
+              className="pointer-events-none select-none"
+              // The SVG has intrinsic size 1200x600. 
+              // If we don't set width/height, it should render at intrinsic size.
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
