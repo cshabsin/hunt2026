@@ -3,6 +3,8 @@
 import React, { useState, useRef, useEffect } from "react";
 
 export default function Home() {
+  const [mapImage, setMapImage] = useState("/mit_campus.png");
+
   const [transform, setTransform] = useState({
     x: 0,
     y: 0,
@@ -106,6 +108,18 @@ export default function Home() {
         <h1 className="text-xl font-bold text-gray-800">Map Overlay Tool</h1>
         
         <div className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">Base Map</label>
+            <select
+              value={mapImage}
+              onChange={(e) => setMapImage(e.target.value)}
+              className="w-full p-2 border rounded text-sm text-black"
+            >
+              <option value="/mit_campus.png">MIT Campus</option>
+              <option value="/cambridge_map.png">City of Cambridge</option>
+            </select>
+          </div>
+
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">Translate X (px)</label>
             <div className="flex gap-2">
@@ -231,8 +245,8 @@ export default function Home() {
           {/* Base Map */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="/mit_campus.png" 
-            alt="MIT Campus Map" 
+            src={mapImage}
+            alt="Base Map" 
             className="block max-w-none pointer-events-none select-none"
             style={{ maxHeight: "90vh", maxWidth: "none" }} // Let it be large, scrollable if needed? Actually let's constrain it to fit view or be scrollable?
             // The user said "find the right fit", implying the map is the reference.
