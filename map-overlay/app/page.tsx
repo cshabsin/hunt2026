@@ -56,6 +56,35 @@ export default function Home() {
     return () => window.removeEventListener("mouseup", handleGlobalMouseUp);
   }, [isDragging]);
 
+  const handleWheel = (e: React.WheelEvent) => {
+    if (!containerRef.current) return;
+    e.preventDefault();
+
+    const rect = containerRef.current.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // Vector from the current transformed center to the mouse
+    const vecX = mouseX - (centerX + transform.x);
+    const vecY = mouseY - (centerY + transform.y);
+
+    const zoomIntensity = 0.001;
+    const delta = -e.deltaY * zoomIntensity;
+    const newScale = Math.max(0.1, Math.min(5, transform.scale * (1 + delta)));
+
+    const scaleRatio = newScale / transform.scale;
+
+    setTransform((prev) => ({
+      ...prev,
+      scale: newScale,
+      x: prev.x + vecX * (1 - scaleRatio),
+      y: prev.y + vecY * (1 - scaleRatio),
+    }));
+  };
+
   const handleChange = (key: keyof typeof transform, value: number) => {
     setTransform((prev) => ({ ...prev, [key]: value }));
   };
@@ -180,16 +209,19 @@ export default function Home() {
         </div>
         
         <p className="text-xs text-gray-500 mt-auto">
-          Tip: You can drag the overlay directly with your mouse.
+          Tip: You can drag the overlay directly with your mouse. Use mouse wheel to zoom.
         </p>
       </div>
 
       {/* Map Area */}
       <div 
-        ref={containerRef}
         className="flex-1 relative overflow-hidden bg-gray-200 cursor-grab active:cursor-grabbing flex items-center justify-center"
       >
-        <div className="relative inline-block border border-gray-400 shadow-2xl bg-white">
+        <div 
+          ref={containerRef}
+          onWheel={handleWheel}
+          className="relative inline-block border border-gray-400 shadow-2xl bg-white"
+        >
           {/* Base Map */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
