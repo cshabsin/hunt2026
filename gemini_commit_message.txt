@@ -1,0 +1,1 @@
+Gemini commit: Initialize Next.js app for map overlay
