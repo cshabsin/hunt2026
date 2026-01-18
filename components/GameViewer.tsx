@@ -10,11 +10,15 @@ interface GameViewerProps {
   games: Game[];
 }
 
+interface UserMove extends Stone {
+  color: 'Black' | 'White';
+}
+
 export default function GameViewer({ games }: GameViewerProps) {
   const [index, setIndex] = useState(0);
   const [golMode, setGolMode] = useState<'Black' | 'White' | null>(null);
   const [golCells, setGolCells] = useState<Stone[]>([]);
-  const [nextMove, setNextMove] = useState<Stone | null>(null);
+  const [userMoves, setUserMoves] = useState<UserMove[]>([]);
   const [generation, setGeneration] = useState(0);
   const golCellsRef = React.useRef(golCells);
 
@@ -26,7 +30,7 @@ export default function GameViewer({ games }: GameViewerProps) {
   const handleIndexChange = useCallback((newIndex: number) => {
       setIndex(newIndex);
       setGolMode(null);
-      setNextMove(null);
+      setUserMoves([]);
       setGeneration(0);
   }, []);
 
@@ -68,7 +72,7 @@ export default function GameViewer({ games }: GameViewerProps) {
           setGolMode(null);
           // If we stop, we might want to keep the nextMove? Or reset?
           // Resetting nextMove is safest as the board state is reset.
-          setNextMove(null);
+          setUserMoves([]);
           setGeneration(0);
           return;
       }
@@ -76,10 +80,9 @@ export default function GameViewer({ games }: GameViewerProps) {
       const baseCells = color === 'Black' ? games[index].black : games[index].white;
       let initialCells = [...baseCells];
       
-      // Include the next move if it matches the color being played
-      if (nextMove && games[index].toPlay === color) {
-          initialCells.push(nextMove);
-      }
+      // Include user moves that match the color being played
+      const relevantUserMoves = userMoves.filter(m => m.color === color);
+      initialCells = [...initialCells, ...relevantUserMoves];
       
       setGolCells(initialCells);
       setGolMode(color);
@@ -89,18 +92,32 @@ export default function GameViewer({ games }: GameViewerProps) {
   const handleBoardClick = (x: number, y: number) => {
       if (golMode) return;
       
-      const isOccupied = 
+      const isOccupiedByBase = 
           games[index].black.some(s => s.x === x && s.y === y) ||
           games[index].white.some(s => s.x === x && s.y === y);
       
-      if (isOccupied) return;
+      if (isOccupiedByBase) return;
       
-      // If clicking the same spot, remove it? Optional. Let's just move it.
-      if (nextMove && nextMove.x === x && nextMove.y === y) {
-          setNextMove(null);
-      } else {
-          setNextMove({ x, y });
+      // Check if clicking on the last user move (Undo)
+      const lastMove = userMoves[userMoves.length - 1];
+      if (lastMove && lastMove.x === x && lastMove.y === y) {
+          setUserMoves(prev => prev.slice(0, -1));
+          return;
       }
+
+      // Check if occupied by any other user move
+      const isOccupiedByUser = userMoves.some(s => s.x === x && s.y === y);
+      if (isOccupiedByUser) return;
+      
+      // Add new move
+      let nextColor: 'Black' | 'White';
+      if (userMoves.length > 0) {
+          nextColor = userMoves[userMoves.length - 1].color === 'Black' ? 'White' : 'Black';
+      } else {
+          nextColor = games[index].toPlay;
+      }
+
+      setUserMoves(prev => [...prev, { x, y, color: nextColor }]);
   };
 
   if (games.length === 0) {
@@ -118,19 +135,18 @@ export default function GameViewer({ games }: GameViewerProps) {
           toPlay: baseGame.toPlay
       };
   } else {
-      // Add nextMove to the appropriate list for display
-      const black = [...baseGame.black];
-      const white = [...baseGame.white];
+      const black = [...baseGame.black, ...userMoves.filter(m => m.color === 'Black')];
+      const white = [...baseGame.white, ...userMoves.filter(m => m.color === 'White')];
       
-      if (nextMove) {
-          if (baseGame.toPlay === 'Black') black.push(nextMove);
-          else white.push(nextMove);
+      let nextToPlay = baseGame.toPlay;
+      if (userMoves.length > 0) {
+          nextToPlay = userMoves[userMoves.length - 1].color === 'Black' ? 'White' : 'Black';
       }
-      
+
       displayGame = {
           black,
           white,
-          toPlay: baseGame.toPlay
+          toPlay: nextToPlay
       };
   }
 
@@ -163,8 +179,8 @@ export default function GameViewer({ games }: GameViewerProps) {
         </div>
         
         <div className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-          <div className={`w-4 h-4 rounded-full border border-black ${baseGame.toPlay === 'Black' ? 'bg-black' : 'bg-white'}`} />
-          {baseGame.toPlay} to play
+          <div className={`w-4 h-4 rounded-full border border-black ${displayGame.toPlay === 'Black' ? 'bg-black' : 'bg-white'}`} />
+          {displayGame.toPlay} to play
         </div>
 
         <div className="flex gap-4">
