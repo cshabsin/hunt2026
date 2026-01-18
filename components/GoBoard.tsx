@@ -74,12 +74,46 @@ export default function GoBoard({ game, onIntersectionClick }: GoBoardProps) {
     }
   }
 
+  // Labels
+  const labels: React.ReactNode[] = [];
+  const alphabet = "ABCDEFGHJKLMNOPQRST";
+  for (let i = 0; i < BOARD_SIZE; i++) {
+    // Column labels (A-T)
+    const colLabel = alphabet[i];
+    labels.push(
+      <text key={`ct-${i}`} x={i} y={-0.8} fontSize="0.6" textAnchor="middle" fill="black" className="font-bold select-none">
+        {colLabel}
+      </text>
+    );
+    labels.push(
+      <text key={`cb-${i}`} x={i} y={BOARD_SIZE - 1 + 1} fontSize="0.6" textAnchor="middle" fill="black" className="font-bold select-none">
+        {colLabel}
+      </text>
+    );
+
+    // Row labels (19-1)
+    const rowLabel = BOARD_SIZE - i;
+    labels.push(
+      <text key={`rl-${i}`} x={-1} y={i} fontSize="0.6" textAnchor="middle" dominantBaseline="middle" fill="black" className="font-bold select-none">
+        {rowLabel}
+      </text>
+    );
+    labels.push(
+      <text key={`rr-${i}`} x={BOARD_SIZE - 1 + 1} y={i} fontSize="0.6" textAnchor="middle" dominantBaseline="middle" fill="black" className="font-bold select-none">
+        {rowLabel}
+      </text>
+    );
+  }
+
   return (
     <div className="w-full max-w-2xl aspect-square bg-[#eebb66] p-4 rounded-lg shadow-lg">
       <svg
-        viewBox={`-0.5 -0.5 ${BOARD_SIZE} ${BOARD_SIZE}`}
+        viewBox="-1.5 -1.5 21 21"
         className="w-full h-full"
       >
+        {/* Labels */}
+        {labels}
+        
         {/* Grid */}
         {lines}
         {/* Star points */}
