@@ -52,38 +52,45 @@ export default function Home() {
         dragStartRef.current = null;
       }
     };
+
+    const container = containerRef.current;
+    const handleWheelNative = (e: WheelEvent) => {
+      e.preventDefault();
+      
+      const rect = container?.getBoundingClientRect();
+      if (!rect) return;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const vecX = mouseX - (centerX + transform.x);
+      const vecY = mouseY - (centerY + transform.y);
+
+      const zoomIntensity = 0.001;
+      const delta = -e.deltaY * zoomIntensity;
+      const newScale = Math.max(0.1, Math.min(10, transform.scale * (1 + delta)));
+
+      const scaleRatio = newScale / transform.scale;
+
+      setTransform((prev) => ({
+        ...prev,
+        scale: newScale,
+        x: prev.x + vecX * (1 - scaleRatio),
+        y: prev.y + vecY * (1 - scaleRatio),
+      }));
+    };
+
     window.addEventListener("mouseup", handleGlobalMouseUp);
-    return () => window.removeEventListener("mouseup", handleGlobalMouseUp);
-  }, [isDragging]);
+    container?.addEventListener("wheel", handleWheelNative, { passive: false });
 
-  const handleWheel = (e: React.WheelEvent) => {
-    if (!containerRef.current) return;
-    e.preventDefault();
-
-    const rect = containerRef.current.getBoundingClientRect();
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    // Vector from the current transformed center to the mouse
-    const vecX = mouseX - (centerX + transform.x);
-    const vecY = mouseY - (centerY + transform.y);
-
-    const zoomIntensity = 0.001;
-    const delta = -e.deltaY * zoomIntensity;
-    const newScale = Math.max(0.1, Math.min(5, transform.scale * (1 + delta)));
-
-    const scaleRatio = newScale / transform.scale;
-
-    setTransform((prev) => ({
-      ...prev,
-      scale: newScale,
-      x: prev.x + vecX * (1 - scaleRatio),
-      y: prev.y + vecY * (1 - scaleRatio),
-    }));
-  };
+    return () => {
+      window.removeEventListener("mouseup", handleGlobalMouseUp);
+      container?.removeEventListener("wheel", handleWheelNative);
+    };
+  }, [isDragging, transform.scale, transform.x, transform.y]);
 
   const handleChange = (key: keyof typeof transform, value: number) => {
     setTransform((prev) => ({ ...prev, [key]: value }));
@@ -104,8 +111,8 @@ export default function Home() {
             <div className="flex gap-2">
               <input
                 type="range"
-                min="-1000"
-                max="1000"
+                min="-2000"
+                max="2000"
                 value={transform.x}
                 onChange={(e) => handleChange("x", Number(e.target.value))}
                 className="w-full"
@@ -124,8 +131,8 @@ export default function Home() {
             <div className="flex gap-2">
               <input
                 type="range"
-                min="-1000"
-                max="1000"
+                min="-2000"
+                max="2000"
                 value={transform.y}
                 onChange={(e) => handleChange("y", Number(e.target.value))}
                 className="w-full"
@@ -166,7 +173,7 @@ export default function Home() {
               <input
                 type="range"
                 min="0.1"
-                max="5"
+                max="10"
                 step="0.01"
                 value={transform.scale}
                 onChange={(e) => handleChange("scale", Number(e.target.value))}
@@ -219,7 +226,6 @@ export default function Home() {
       >
         <div 
           ref={containerRef}
-          onWheel={handleWheel}
           className="relative inline-block border border-gray-400 shadow-2xl bg-white"
         >
           {/* Base Map */}
