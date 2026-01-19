@@ -34,6 +34,11 @@ export default function SkillTree() {
     const calculatedNodes: NodeWithPosition[] = [];
     const calculatedConnections: { x1: number; y1: number; x2: number; y2: number; key: string }[] = [];
 
+    const CANVAS_WIDTH = 22000;
+    const CANVAS_HEIGHT = 18000;
+    const OFFSET_X = CANVAS_WIDTH / 2;
+    const OFFSET_Y = CANVAS_HEIGHT / 2;
+
     // 1. Calculate positions
     Object.entries(data.nodes).forEach(([id, node]) => {
         // Skip root or nodes without group
@@ -41,7 +46,12 @@ export default function SkillTree() {
         if (groupId === undefined || !data.groups[groupId]) return;
 
         const pos = getPosition(node, data.groups[groupId], data.constants);
-        const nodeWithPos = { ...node, x: pos.x, y: pos.y, id: parseInt(id) || 0 };
+        
+        // Apply offset to center the tree in the positive coordinate space
+        const x = pos.x + OFFSET_X;
+        const y = pos.y + OFFSET_Y;
+
+        const nodeWithPos = { ...node, x, y, id: parseInt(id) || 0 };
         nodesMap.set(id, nodeWithPos);
         calculatedNodes.push(nodeWithPos);
     });
@@ -72,7 +82,7 @@ export default function SkillTree() {
         }
     });
 
-    return { nodes: calculatedNodes, connections: calculatedConnections };
+    return { nodes: calculatedNodes, connections: calculatedConnections, width: CANVAS_WIDTH, height: CANVAS_HEIGHT };
   }, [data]);
 
   if (loading) return (
@@ -90,54 +100,53 @@ export default function SkillTree() {
   return (
     <div className="w-full h-screen bg-black overflow-hidden">
       <TransformWrapper
-        initialScale={0.15}
-        minScale={0.01}
+        initialScale={0.2}
+        minScale={0.05}
         maxScale={2}
         centerOnInit={true}
         limitToBounds={false}
       >
         <TransformComponent wrapperClass="w-full h-full" contentClass="w-full h-full">
             <div style={{ 
-                width: 20000, 
-                height: 20000, 
-                position: 'relative', 
-                transform: 'translate(-10000px, -10000px)' 
+                width: nodes.length ? 22000 : '100%', 
+                height: nodes.length ? 18000 : '100%', 
+                position: 'relative',
+                background: '#050505' // Very dark bg for contrast
             }}>
-                <svg width="20000" height="20000" className="absolute top-0 left-0">
-                    <g transform="translate(10000, 10000)">
-                        {connections.map(conn => (
-                            <line 
-                                key={conn.key}
-                                x1={conn.x1} 
-                                y1={conn.y1} 
-                                x2={conn.x2} 
-                                y2={conn.y2} 
-                                stroke="#333" 
-                                strokeWidth="5" 
-                            />
-                        ))}
-                    </g>
-                </svg>
-                <div className="absolute" style={{ left: 10000, top: 10000 }}>
-                    {nodes.map(node => (
-                        <div
-                            key={node.skill || node.id}
-                            className={`absolute rounded-full border border-gray-600 flex items-center justify-center group
-                                ${node.isKeystone ? 'w-24 h-24 bg-red-900 z-20' : node.isNotable ? 'w-16 h-16 bg-yellow-700 z-10' : 'w-8 h-8 bg-gray-800 z-0'}
-                            `}
-                            style={{
-                                left: node.x,
-                                top: node.y,
-                                transform: 'translate(-50%, -50%)'
-                            }}
-                        >
-                             <div className="hidden group-hover:block absolute bottom-full mb-2 p-2 bg-gray-900 text-white text-xs rounded whitespace-nowrap z-50 pointer-events-none">
-                                <div className="font-bold">{node.name}</div>
-                                {node.stats?.map((s, i) => <div key={i}>{s}</div>)}
-                             </div>
-                        </div>
+                <svg width="22000" height="18000" className="absolute top-0 left-0 pointer-events-none">
+                    {connections.map(conn => (
+                        <line 
+                            key={conn.key}
+                            x1={conn.x1} 
+                            y1={conn.y1} 
+                            x2={conn.x2} 
+                            y2={conn.y2} 
+                            stroke="#333" 
+                            strokeWidth="4" 
+                        />
                     ))}
-                </div>
+                </svg>
+                
+                {nodes.map(node => (
+                    <div
+                        key={node.skill || node.id}
+                        className={`absolute rounded-full border border-gray-600 flex items-center justify-center group
+                            ${node.isKeystone ? 'w-16 h-16 bg-red-900 z-20 border-2 border-red-500' : node.isNotable ? 'w-10 h-10 bg-yellow-700 z-10 border-yellow-500' : 'w-4 h-4 bg-gray-800 z-0'}
+                        `}
+                        style={{
+                            left: node.x,
+                            top: node.y,
+                            transform: 'translate(-50%, -50%)'
+                        }}
+                    >
+                         <div className="hidden group-hover:block absolute bottom-full mb-2 p-2 bg-gray-900 text-white text-xs rounded border border-gray-700 whitespace-nowrap z-50 pointer-events-none min-w-[200px]">
+                            <div className="font-bold text-yellow-500 text-sm mb-1">{node.name}</div>
+                            {node.stats?.map((s, i) => <div key={i} className="text-gray-300">{s}</div>)}
+                            {node.isKeystone && <div className="text-red-400 mt-1 text-[10px] uppercase tracking-wider">Keystone</div>}
+                            {node.isNotable && <div className="text-yellow-400 mt-1 text-[10px] uppercase tracking-wider">Notable</div>}
+                         </div>
+                    </div>
+                ))}
             </div>
         </TransformComponent>
       </TransformWrapper>
