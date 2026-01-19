@@ -21,8 +21,9 @@ export default function GameViewer({ games }: GameViewerProps) {
   const [mode, setMode] = useState<Mode>('Brainstorm');
   const [golMode, setGolMode] = useState<'Black' | 'White' | null>(null);
   const [golCells, setGolCells] = useState<Stone[]>([]);
-  const [userMoves, setUserMoves] = useState<UserMove[]>([]);
-  const [replayIndex, setReplayIndex] = useState(0); // For Solve mode
+  const [userMoves, setUserMoves] = useState<UserMove[]>([]); // For Brainstorm mode
+  const [solveMoves, setSolveMoves] = useState<Record<number, UserMove>>({}); // For Solve mode
+  const [replayIndex, setReplayIndex] = useState(0); // Deprecated but kept for type safety if needed, can remove
   const [generation, setGeneration] = useState(0);
   const golCellsRef = React.useRef(golCells);
 
@@ -34,9 +35,9 @@ export default function GameViewer({ games }: GameViewerProps) {
   const handleIndexChange = useCallback((newIndex: number) => {
       setIndex(newIndex);
       setGolMode(null);
-      setUserMoves([]);
+      setUserMoves([]); // Reset brainstorm moves
       setGeneration(0);
-      setReplayIndex(0);
+      // Do NOT reset solveMoves here
   }, []);
 
   useEffect(() => {
@@ -87,8 +88,15 @@ export default function GameViewer({ games }: GameViewerProps) {
       initialCells = [...baseCells];
 
       // In both modes, include user moves that match the color
-      const relevantUserMoves = userMoves.filter(m => m.color === color);
-      initialCells = [...initialCells, ...relevantUserMoves];
+      if (mode === 'Solve') {
+          const storedMove = solveMoves[index];
+          if (storedMove && storedMove.color === color) {
+              initialCells.push(storedMove);
+          }
+      } else {
+          const relevantUserMoves = userMoves.filter(m => m.color === color);
+          initialCells = [...initialCells, ...relevantUserMoves];
+      }
       
       setGolCells(initialCells);
       setGolMode(color);
@@ -106,8 +114,12 @@ export default function GameViewer({ games }: GameViewerProps) {
 
       if (mode === 'Solve') {
           // In Solve mode, we only allow ONE user move (the guess)
-          // If they click a new spot, we replace the existing move.
-          setUserMoves([{ x, y, color: baseGame.toPlay }]);
+          // If they click a new spot, we replace the existing move for this game index.
+          const newMove: UserMove = { x, y, color: baseGame.toPlay };
+          setSolveMoves(prev => ({
+              ...prev,
+              [index]: newMove
+          }));
           return;
       }
       
@@ -148,24 +160,29 @@ export default function GameViewer({ games }: GameViewerProps) {
           toPlay: baseGame.toPlay
       };
   } else {
-      // Both modes now just overlay userMoves on baseGame
-      const black = [...baseGame.black, ...userMoves.filter(m => m.color === 'Black')];
-      const white = [...baseGame.white, ...userMoves.filter(m => m.color === 'White')];
-      
+      let activeBlack = [...baseGame.black];
+      let activeWhite = [...baseGame.white];
       let nextToPlay = baseGame.toPlay;
-      
+
       if (mode === 'Solve') {
-           // In solve mode, next to play is always the base game's next to play
-           // (or maybe we shouldn't show it as 'to play' if the stone is placed? 
-           // But keeping it consistent is fine.)
-           nextToPlay = baseGame.toPlay;
+          // Solve mode: overlay stored move if exists
+          const storedMove = solveMoves[index];
+          if (storedMove) {
+              if (storedMove.color === 'Black') activeBlack.push(storedMove);
+              else activeWhite.push(storedMove);
+          }
+          // nextToPlay remains baseGame.toPlay as we are just "placing" the next move
       } else {
+          // Brainstorm mode: overlay userMoves stack
+          activeBlack = [...activeBlack, ...userMoves.filter(m => m.color === 'Black')];
+          activeWhite = [...activeWhite, ...userMoves.filter(m => m.color === 'White')];
+          
           if (userMoves.length > 0) {
               nextToPlay = userMoves[userMoves.length - 1].color === 'Black' ? 'White' : 'Black';
           }
       }
 
-      displayGame = { black, white, toPlay: nextToPlay };
+      displayGame = { black: activeBlack, white: activeWhite, toPlay: nextToPlay };
   }
 
   return (
@@ -186,7 +203,7 @@ export default function GameViewer({ games }: GameViewerProps) {
             <button
                 onClick={() => {
                     setMode('Solve');
-                    setReplayIndex(0); // Reset replay when switching to Solve
+                    setGolMode(null); // Ensure GOL stops when entering solve
                 }}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
                     mode === 'Solve' ? 'bg-white shadow text-black' : 'text-gray-600 hover:text-black'
@@ -226,30 +243,32 @@ export default function GameViewer({ games }: GameViewerProps) {
           {displayGame.toPlay} to play
         </div>
 
-        <div className="flex gap-4">
-            <button
-                onClick={() => startGameOfLife('Black')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${
-                    golMode === 'Black' 
-                    ? 'bg-red-500 text-white hover:bg-red-600' 
-                    : 'bg-black text-white hover:bg-gray-800'
-                }`}
-            >
-                {golMode === 'Black' ? <Square size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
-                {golMode === 'Black' ? 'Stop GOL (Black)' : 'Play GOL Black'}
-            </button>
-            <button
-                onClick={() => startGameOfLife('White')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium border border-gray-300 transition ${
-                     golMode === 'White'
-                     ? 'bg-red-500 text-white border-red-500 hover:bg-red-600'
-                     : 'bg-white text-gray-800 hover:bg-gray-50'
-                }`}
-            >
-                {golMode === 'White' ? <Square size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
-                {golMode === 'White' ? 'Stop GOL (White)' : 'Play GOL White'}
-            </button>
-        </div>
+        {mode === 'Brainstorm' && (
+            <div className="flex gap-4">
+                <button
+                    onClick={() => startGameOfLife('Black')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${
+                        golMode === 'Black' 
+                        ? 'bg-red-500 text-white hover:bg-red-600' 
+                        : 'bg-black text-white hover:bg-gray-800'
+                    }`}
+                >
+                    {golMode === 'Black' ? <Square size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
+                    {golMode === 'Black' ? 'Stop GOL (Black)' : 'Play GOL Black'}
+                </button>
+                <button
+                    onClick={() => startGameOfLife('White')}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium border border-gray-300 transition ${
+                        golMode === 'White'
+                        ? 'bg-red-500 text-white border-red-500 hover:bg-red-600'
+                        : 'bg-white text-gray-800 hover:bg-gray-50'
+                    }`}
+                >
+                    {golMode === 'White' ? <Square size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
+                    {golMode === 'White' ? 'Stop GOL (White)' : 'Play GOL White'}
+                </button>
+            </div>
+        )}
         
         {golMode && (
             <div className="text-lg font-semibold text-gray-700">
