@@ -306,6 +306,18 @@ export default function GameViewer({ games }: GameViewerProps) {
         <p className="text-sm text-gray-500">
             Use Left/Right Arrow keys to navigate
         </p>
+
+        <div className="max-w-4xl text-center text-gray-600 space-y-4 mt-8 border-t pt-8">
+            <p>
+                <strong>"Brainstorm"</strong> shows the flailing we did during the hunt to be able to 
+                visualize the answers more easily, and to follow the blind alley of 
+                "maybe it's life, liberty, and the pursuit of happiness, a reference to the Game of Life?".
+            </p>
+            <p>
+                <strong>"Solve"</strong> is a visualization of what we did on pencil and paper 
+                next to our Brainstorming to get us our readout.
+            </p>
+        </div>
     </div>
   );
 }
