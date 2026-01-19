@@ -31,6 +31,7 @@ jobs:
             skilldrasil/package-lock.json
             physics/graph-viewer/package-lock.json
             mass_confusion/map-overlay/package-lock.json
+            balancing_act/puzzle-ui/package-lock.json
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

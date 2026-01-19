@@ -43,6 +43,7 @@ build_app "pursuit" "pursuit"
 build_app "skilldrasil" "skilldrasil"
 build_app "physics/graph-viewer" "physics"
 build_app "mass_confusion/map-overlay" "mass_confusion"
+build_app "balancing_act/puzzle-ui" "balancing_act"
 
 # Create landing page
 echo "Creating landing page..."
@@ -70,6 +71,11 @@ cat > "$DIST_DIR/index.html" <<EOF
         <li>
             <a href="pursuit/">Pursuit of Liberty</a>
             <p>Go Game Viewer & Game of Life Simulation</p>
+            <p style="color: red; font-weight: bold; margin-top: 0.25rem;">Warning: This tool may reveal spoilers for the puzzle.</p>
+        </li>
+        <li>
+            <a href="balancing_act/">Balancing Act</a>
+            <p>Puzzle UI Tool</p>
             <p style="color: red; font-weight: bold; margin-top: 0.25rem;">Warning: This tool may reveal spoilers for the puzzle.</p>
         </li>
         <li>

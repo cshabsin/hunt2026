@@ -13,7 +13,7 @@ A Go Game Viewer with Game of Life simulation features.
 A skill tree visualization application.
 - **Tech**: Next.js, `react-zoom-pan-pinch` for interactive tree navigation.
 
-### 3. Physics Graph Viewer (`/physics/graph-viewer`)
+### 3. The Physics of Linguistic Fracture (`/physics/graph-viewer`)
 A graph visualization tool located within the physics module.
 - **Context**: Part of the physics puzzle/simulation suite.
 - **Tech**: Next.js.
@@ -21,6 +21,10 @@ A graph visualization tool located within the physics module.
 ### 4. Mass Confusion (`/mass_confusion/map-overlay`)
 A map overlay application.
 - **Features**: Includes Cambridge map overlays.
+- **Tech**: Next.js.
+
+### 5. Balancing Act (`/balancing_act/puzzle-ui`)
+A puzzle UI tool.
 - **Tech**: Next.js.
 
 ## Getting Started
