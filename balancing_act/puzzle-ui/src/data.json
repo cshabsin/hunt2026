@@ -1,0 +1,863 @@
+[
+  {
+    "id": 0,
+    "originalLine": 0,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 1,
+    "originalLine": 1,
+    "text": "Declaration in a ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 2,
+    "originalLine": 1,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 3,
+    "originalLine": 2,
+    "text": "Domain for Carlsen or Gukesh: CHESS",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 4,
+    "originalLine": 3,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 5,
+    "originalLine": 3,
+    "text": " game: CHECK",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 6,
+    "originalLine": 4,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 7,
+    "originalLine": 4,
+    "text": " ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 8,
+    "originalLine": 4,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 9,
+    "originalLine": 5,
+    "text": "Items that get distributed by a ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 10,
+    "originalLine": 5,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 11,
+    "originalLine": 6,
+    "text": "Job for Gordon Krantz or Pat Clifton: POSTMAN",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 12,
+    "originalLine": 7,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 13,
+    "originalLine": 7,
+    "text": ": LETTERS",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 14,
+    "originalLine": 7,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 15,
+    "originalLine": 7,
+    "text": " ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 16,
+    "originalLine": 7,
+    "text": null,
+    "left": null,
+    "right": "[["
+  },
+  {
+    "id": 17,
+    "originalLine": 8,
+    "text": "Adam who notably sang \"",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 18,
+    "originalLine": 8,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 19,
+    "originalLine": 9,
+    "text": "Beetles that are also commonly known as \"",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 20,
+    "originalLine": 9,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 21,
+    "originalLine": 10,
+    "text": "Racer ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 22,
+    "originalLine": 10,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 23,
+    "originalLine": 11,
+    "text": "Fashion designer Alexander who hailed from London: MCQUEEN",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 24,
+    "originalLine": 12,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 25,
+    "originalLine": 12,
+    "text": " once deemed \"not the GOAT\" on ESPN: LIGHTNING",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 26,
+    "originalLine": 13,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 27,
+    "originalLine": 13,
+    "text": " bugs\": FIREFLIES",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 28,
+    "originalLine": 14,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 29,
+    "originalLine": 14,
+    "text": "\": YOUNG",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 30,
+    "originalLine": 15,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 31,
+    "originalLine": 15,
+    "text": " ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 32,
+    "originalLine": 15,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 33,
+    "originalLine": 16,
+    "text": "Lower one's head, evasively: DUCK",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 34,
+    "originalLine": 17,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 35,
+    "originalLine": 17,
+    "text": "'s ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 36,
+    "originalLine": 17,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 37,
+    "originalLine": 18,
+    "text": "Word that might precede ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 38,
+    "originalLine": 18,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 39,
+    "originalLine": 19,
+    "text": "What ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 40,
+    "originalLine": 19,
+    "text": null,
+    "left": null,
+    "right": "[["
+  },
+  {
+    "id": 41,
+    "originalLine": 20,
+    "text": "Fruit wasps pollinate: FIG",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 42,
+    "originalLine": 21,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 43,
+    "originalLine": 21,
+    "text": " ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 44,
+    "originalLine": 21,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 45,
+    "originalLine": 22,
+    "text": "Toss, as a ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 46,
+    "originalLine": 22,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 47,
+    "originalLine": 23,
+    "text": "Kick the bucket: DIE",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 48,
+    "originalLine": 24,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 49,
+    "originalLine": 24,
+    "text": ": ROLL",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 50,
+    "originalLine": 24,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 51,
+    "originalLine": 24,
+    "text": " snacks currently produced by Nabisco: NEWTONS",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 52,
+    "originalLine": 25,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 53,
+    "originalLine": 25,
+    "text": " measure, or ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 54,
+    "originalLine": 25,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 55,
+    "originalLine": 26,
+    "text": "Times ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 56,
+    "originalLine": 26,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 57,
+    "originalLine": 27,
+    "text": "Opposite of old: NEW",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 58,
+    "originalLine": 28,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 59,
+    "originalLine": 28,
+    "text": " Roman, e.g.: FONT",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 60,
+    "originalLine": 29,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 61,
+    "originalLine": 29,
+    "text": " boldness: WEIGHT",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 62,
+    "originalLine": 30,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 63,
+    "originalLine": 30,
+    "text": " or ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 64,
+    "originalLine": 30,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 65,
+    "originalLine": 31,
+    "text": "Intracranial organ that generates ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 66,
+    "originalLine": 31,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 67,
+    "originalLine": 32,
+    "text": "\"It's the ___ that ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 68,
+    "originalLine": 32,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 69,
+    "originalLine": 33,
+    "text": "Enumerates, like with these clues' lengths: COUNTS",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 70,
+    "originalLine": 34,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 71,
+    "originalLine": 34,
+    "text": "\" (idiomatic saying): THOUGHT",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 72,
+    "originalLine": 35,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 73,
+    "originalLine": 35,
+    "text": ": BRAIN",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 74,
+    "originalLine": 35,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 75,
+    "originalLine": 35,
+    "text": "ed: FEATHER",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 76,
+    "originalLine": 36,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 77,
+    "originalLine": 36,
+    "text": " coating: DOWN",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 78,
+    "originalLine": 37,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 79,
+    "originalLine": 37,
+    "text": " ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 80,
+    "originalLine": 37,
+    "text": null,
+    "left": null,
+    "right": "[["
+  },
+  {
+    "id": 81,
+    "originalLine": 38,
+    "text": "Award category you might find in a high school student's yearbook (11): SUPERLATIVE",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 82,
+    "originalLine": 39,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 83,
+    "originalLine": 39,
+    "text": " that's associated with the ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 84,
+    "originalLine": 39,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 85,
+    "originalLine": 40,
+    "text": "Popova who represented her country at ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 86,
+    "originalLine": 40,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 87,
+    "originalLine": 41,
+    "text": "Contest whose 2025 iteration featured participants from 37 different countries: EUROVISION",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 88,
+    "originalLine": 42,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 89,
+    "originalLine": 42,
+    "text": ": MARIANA",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 90,
+    "originalLine": 42,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 91,
+    "originalLine": 42,
+    "text": " ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 92,
+    "originalLine": 42,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 93,
+    "originalLine": 43,
+    "text": "Word that precedes warfare or coat: TRENCH",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 94,
+    "originalLine": 44,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 95,
+    "originalLine": 44,
+    "text": ": DEEPEST",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 96,
+    "originalLine": 44,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 97,
+    "originalLine": 44,
+    "text": " ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 98,
+    "originalLine": 44,
+    "text": null,
+    "left": null,
+    "right": "[["
+  },
+  {
+    "id": 99,
+    "originalLine": 45,
+    "text": "It's ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 100,
+    "originalLine": 45,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 101,
+    "originalLine": 46,
+    "text": "Child's declaration of ownership: MINE",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 102,
+    "originalLine": 47,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 103,
+    "originalLine": 47,
+    "text": "d or ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 104,
+    "originalLine": 47,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 105,
+    "originalLine": 48,
+    "text": "Ab exercise performed on one's back: CRUNCH",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 106,
+    "originalLine": 49,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 107,
+    "originalLine": 49,
+    "text": "ed: DATA",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 108,
+    "originalLine": 50,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 109,
+    "originalLine": 50,
+    "text": " structure taught alongside ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 110,
+    "originalLine": 50,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 111,
+    "originalLine": 51,
+    "text": "Wait one's turn in ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 112,
+    "originalLine": 51,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 113,
+    "originalLine": 52,
+    "text": "It's ",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 114,
+    "originalLine": 52,
+    "text": null,
+    "left": null,
+    "right": "["
+  },
+  {
+    "id": 115,
+    "originalLine": 53,
+    "text": "Toddler's \"little piggy\": TOE",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 116,
+    "originalLine": 54,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 117,
+    "originalLine": 54,
+    "text": "d or held: LINE",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 118,
+    "originalLine": 55,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 119,
+    "originalLine": 55,
+    "text": ": QUEUE",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 120,
+    "originalLine": 55,
+    "text": null,
+    "left": "]",
+    "right": null
+  },
+  {
+    "id": 121,
+    "originalLine": 55,
+    "text": "s: STACK",
+    "left": null,
+    "right": null
+  },
+  {
+    "id": 122,
+    "originalLine": 56,
+    "text": null,
+    "left": "]",
+    "right": null
+  }
+]
