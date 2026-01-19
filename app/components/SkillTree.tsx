@@ -152,23 +152,31 @@ export default function SkillTree() {
 
     
 
-            // 3. Find Shortest Path (BFS) for Sequence
+                // 3. Find Shortest Path (BFS) for Sequence
 
     
 
-            const checkpoints = [
+                const checkpoints = [
 
     
 
-                { id: 52714, name: "Prowess" },
+                    { id: 52031, name: "Disintegration" },
 
     
 
-                // { id: ???, name: "Ballistics" }, // Not found
+                    { id: 52714, name: "Prowess" },
 
     
 
-                // { id: ???, name: "Intuition" }, // Not found
+                    // { id: ???, name: "Ballistics" }, // Not found
+
+    
+
+                    // { id: ???, name: "Intuition" }, // Not found
+
+    
+
+            
 
     
 
