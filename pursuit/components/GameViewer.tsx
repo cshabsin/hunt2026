@@ -192,9 +192,6 @@ export default function GameViewer({ games }: GameViewerProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
         <h1 className="text-3xl font-bold text-gray-800">Pursuit of Liberty</h1>
-        <p className="text-red-500 font-medium -mt-4">
-            Warning: Clicking through games may reveal spoilers.
-        </p>
 
         {/* Mode Toggle */}
         <div className="flex bg-gray-200 p-1 rounded-lg">

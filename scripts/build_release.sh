@@ -68,8 +68,9 @@ cat > "$DIST_DIR/index.html" <<EOF
     <p>Collection of applications for the hunt.</p>
     <ul>
         <li>
-            <a href="pursuit/">Pursuit</a>
+            <a href="pursuit/">Pursuit of Liberty</a>
             <p>Go Game Viewer & Game of Life Simulation</p>
+            <p style="color: red; font-weight: bold; margin-top: 0.25rem;">Warning: Clicking through the games in this tool may reveal spoilers for the puzzle.</p>
         </li>
         <li>
             <a href="skilldrasil/">Skilldrasil</a>
