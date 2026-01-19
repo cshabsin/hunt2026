@@ -185,6 +185,17 @@ export default function GameViewer({ games }: GameViewerProps) {
       displayGame = { black: activeBlack, white: activeWhite, toPlay: nextToPlay };
   }
 
+  // Construct Readout Game State
+  const readoutGame: Game = useMemo(() => {
+      const black: Stone[] = [];
+      const white: Stone[] = [];
+      Object.values(solveMoves).forEach(move => {
+          if (move.color === 'Black') black.push({ x: move.x, y: move.y });
+          else white.push({ x: move.x, y: move.y });
+      });
+      return { black, white, toPlay: 'Black' }; // toPlay is irrelevant for readout
+  }, [solveMoves]);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
         <h1 className="text-3xl font-bold text-gray-800">Pursuit of Liberty</h1>
@@ -214,33 +225,49 @@ export default function GameViewer({ games }: GameViewerProps) {
             </button>
         </div>
         
-        <div className="flex items-center gap-4">
-            <button
-                onClick={() => handleIndexChange(Math.max(0, index - 1))}
-                disabled={index === 0}
-                className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 transition"
-            >
-                <ChevronLeft size={32} />
-            </button>
-            
-            <GoBoard game={displayGame} onIntersectionClick={handleBoardClick} />
+        <div className="flex flex-col md:flex-row gap-8 items-start">
+            {/* Puzzle Board Section */}
+            <div className="flex flex-col items-center gap-4">
+                <h2 className="text-xl font-bold text-gray-700">Puzzle</h2>
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => handleIndexChange(Math.max(0, index - 1))}
+                        disabled={index === 0}
+                        className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 transition"
+                    >
+                        <ChevronLeft size={32} />
+                    </button>
+                    
+                    <GoBoard game={displayGame} onIntersectionClick={handleBoardClick} />
 
-            <button
-                onClick={() => handleIndexChange(Math.min(games.length - 1, index + 1))}
-                disabled={index === games.length - 1}
-                className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 transition"
-            >
-                <ChevronRight size={32} />
-            </button>
-        </div>
+                    <button
+                        onClick={() => handleIndexChange(Math.min(games.length - 1, index + 1))}
+                        disabled={index === games.length - 1}
+                        className="p-2 bg-gray-200 rounded-full disabled:opacity-50 hover:bg-gray-300 transition"
+                    >
+                        <ChevronRight size={32} />
+                    </button>
+                </div>
+                 <div className="text-xl font-medium text-gray-700">
+                    Game {index + 1} of {games.length}
+                </div>
+                
+                <div className="flex items-center gap-2 text-lg font-semibold text-gray-800">
+                  <div className={`w-4 h-4 rounded-full border border-black ${displayGame.toPlay === 'Black' ? 'bg-black' : 'bg-white'}`} />
+                  {displayGame.toPlay} to play
+                </div>
+            </div>
 
-        <div className="text-xl font-medium text-gray-700">
-            Game {index + 1} of {games.length}
-        </div>
-        
-        <div className="flex items-center gap-2 text-lg font-semibold text-gray-800">
-          <div className={`w-4 h-4 rounded-full border border-black ${displayGame.toPlay === 'Black' ? 'bg-black' : 'bg-white'}`} />
-          {displayGame.toPlay} to play
+            {/* Readout Board Section */}
+            <div className="flex flex-col items-center gap-4">
+                <h2 className="text-xl font-bold text-gray-700">Readout</h2>
+                <div className="py-2">
+                     <GoBoard game={readoutGame} />
+                </div>
+                 <div className="text-gray-500 italic mt-4">
+                    Accumulated Moves
+                </div>
+            </div>
         </div>
 
         {mode === 'Brainstorm' && (
