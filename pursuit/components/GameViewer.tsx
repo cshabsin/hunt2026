@@ -74,17 +74,6 @@ export default function GameViewer({ games }: GameViewerProps) {
 
   const baseGame = games[index];
 
-  // Interleave moves for Solve mode replay
-  const orderedMoves = useMemo(() => {
-      const moves: UserMove[] = [];
-      const len = Math.max(baseGame.black.length, baseGame.white.length);
-      for (let i = 0; i < len; i++) {
-          if (i < baseGame.black.length) moves.push({ ...baseGame.black[i], color: 'Black' });
-          if (i < baseGame.white.length) moves.push({ ...baseGame.white[i], color: 'White' });
-      }
-      return moves;
-  }, [baseGame]);
-
   const startGameOfLife = (color: 'Black' | 'White') => {
       if (golMode === color) {
           setGolMode(null);
@@ -94,18 +83,12 @@ export default function GameViewer({ games }: GameViewerProps) {
       }
       
       let initialCells: Stone[] = [];
+      const baseCells = color === 'Black' ? baseGame.black : baseGame.white;
+      initialCells = [...baseCells];
 
-      if (mode === 'Solve') {
-          // In Solve mode, use the visible stones from replay
-          const visibleMoves = orderedMoves.slice(0, replayIndex);
-          initialCells = visibleMoves.filter(m => m.color === color);
-      } else {
-          // In Brainstorm mode, use base game + user moves
-          const baseCells = color === 'Black' ? baseGame.black : baseGame.white;
-          initialCells = [...baseCells];
-          const relevantUserMoves = userMoves.filter(m => m.color === color);
-          initialCells = [...initialCells, ...relevantUserMoves];
-      }
+      // In both modes, include user moves that match the color
+      const relevantUserMoves = userMoves.filter(m => m.color === color);
+      initialCells = [...initialCells, ...relevantUserMoves];
       
       setGolCells(initialCells);
       setGolMode(color);
@@ -114,21 +97,21 @@ export default function GameViewer({ games }: GameViewerProps) {
   
   const handleBoardClick = (x: number, y: number) => {
       if (golMode) return;
-
-      if (mode === 'Solve') {
-          // In Solve mode, clicking advances the replay
-          if (replayIndex < orderedMoves.length) {
-              setReplayIndex(prev => prev + 1);
-          }
-          return;
-      }
       
-      // Brainstorm Mode Logic
       const isOccupiedByBase = 
           baseGame.black.some(s => s.x === x && s.y === y) ||
           baseGame.white.some(s => s.x === x && s.y === y);
       
       if (isOccupiedByBase) return;
+
+      if (mode === 'Solve') {
+          // In Solve mode, we only allow ONE user move (the guess)
+          // If they click a new spot, we replace the existing move.
+          setUserMoves([{ x, y, color: baseGame.toPlay }]);
+          return;
+      }
+      
+      // Brainstorm Mode Logic
       
       // Check if clicking on the last user move (Undo)
       const lastMove = userMoves[userMoves.length - 1];
@@ -164,26 +147,22 @@ export default function GameViewer({ games }: GameViewerProps) {
           white: golMode === 'White' ? golCells : [],
           toPlay: baseGame.toPlay
       };
-  } else if (mode === 'Solve') {
-      const visibleMoves = orderedMoves.slice(0, replayIndex);
-      const black = visibleMoves.filter(m => m.color === 'Black');
-      const white = visibleMoves.filter(m => m.color === 'White');
-      
-      // Determine next to play in replay sequence
-      let nextToPlay = baseGame.toPlay;
-      if (replayIndex < orderedMoves.length) {
-          nextToPlay = orderedMoves[replayIndex].color;
-      }
-
-      displayGame = { black, white, toPlay: nextToPlay };
   } else {
-      // Brainstorm Mode
+      // Both modes now just overlay userMoves on baseGame
       const black = [...baseGame.black, ...userMoves.filter(m => m.color === 'Black')];
       const white = [...baseGame.white, ...userMoves.filter(m => m.color === 'White')];
       
       let nextToPlay = baseGame.toPlay;
-      if (userMoves.length > 0) {
-          nextToPlay = userMoves[userMoves.length - 1].color === 'Black' ? 'White' : 'Black';
+      
+      if (mode === 'Solve') {
+           // In solve mode, next to play is always the base game's next to play
+           // (or maybe we shouldn't show it as 'to play' if the stone is placed? 
+           // But keeping it consistent is fine.)
+           nextToPlay = baseGame.toPlay;
+      } else {
+          if (userMoves.length > 0) {
+              nextToPlay = userMoves[userMoves.length - 1].color === 'Black' ? 'White' : 'Black';
+          }
       }
 
       displayGame = { black, white, toPlay: nextToPlay };
