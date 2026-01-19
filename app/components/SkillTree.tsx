@@ -32,8 +32,8 @@ export default function SkillTree() {
       });
   }, []);
 
-  const { nodes, connections, pathSet, pathNodes, steps, checkpoints } = useMemo(() => {
-    if (!data) return { nodes: [], connections: [], pathSet: new Set(), pathNodes: new Set(), steps: 0, checkpoints: [] };
+  const { nodes, connections, pathSet, pathNodes, steps, segments } = useMemo(() => {
+    if (!data) return { nodes: [], connections: [], pathSet: new Set(), pathNodes: new Set(), steps: 0, segments: [] };
 
     const nodesMap = new Map<string, NodeWithPosition>();
     const calculatedNodes: NodeWithPosition[] = [];
@@ -304,51 +304,227 @@ export default function SkillTree() {
 
     
 
-            for (let i = 0; i < checkpoints.length - 1; i++) {
+                const segments: { start: string; end: string; steps: number }[] = [];
 
     
 
-                const start = checkpoints[i].id;
+        
 
     
 
-                const end = checkpoints[i + 1].id;
+            
 
     
 
-                const segmentPath = findSegment(start, end);
+        
 
     
 
-                
+                for (let i = 0; i < checkpoints.length - 1; i++) {
 
     
 
-                if (segmentPath) {
+        
 
     
 
-                    totalSteps += segmentPath.length - 1;
+                    const start = checkpoints[i].id;
 
     
 
-                    segmentPath.forEach(nodeId => pathNodes.add(nodeId));
+        
 
     
 
-                     for (let j = 0; j < segmentPath.length - 1; j++) {
+                    const end = checkpoints[i + 1].id;
 
     
 
-                        const n1 = segmentPath[j];
+        
 
     
 
-                        const n2 = segmentPath[j+1];
+                    const segmentPath = findSegment(start, end);
 
     
 
-                        pathSet.add(`${Math.min(n1, n2)}-${Math.max(n1, n2)}`);
+        
+
+    
+
+                    
+
+    
+
+        
+
+    
+
+                    if (segmentPath) {
+
+    
+
+        
+
+    
+
+                        const segmentSteps = segmentPath.length - 1;
+
+    
+
+        
+
+    
+
+                        totalSteps += segmentSteps;
+
+    
+
+        
+
+    
+
+                        segments.push({
+
+    
+
+        
+
+    
+
+                            start: checkpoints[i].name,
+
+    
+
+        
+
+    
+
+                            end: checkpoints[i+1].name,
+
+    
+
+        
+
+    
+
+                            steps: segmentSteps
+
+    
+
+        
+
+    
+
+                        });
+
+    
+
+        
+
+    
+
+            
+
+    
+
+        
+
+    
+
+                        segmentPath.forEach(nodeId => pathNodes.add(nodeId));
+
+    
+
+        
+
+    
+
+                         for (let j = 0; j < segmentPath.length - 1; j++) {
+
+    
+
+        
+
+    
+
+                            const n1 = segmentPath[j];
+
+    
+
+        
+
+    
+
+                            const n2 = segmentPath[j+1];
+
+    
+
+        
+
+    
+
+                            pathSet.add(`${Math.min(n1, n2)}-${Math.max(n1, n2)}`);
+
+    
+
+        
+
+    
+
+                        }
+
+    
+
+        
+
+    
+
+                    } else {
+
+    
+
+        
+
+    
+
+                         segments.push({
+
+    
+
+        
+
+    
+
+                            start: checkpoints[i].name,
+
+    
+
+        
+
+    
+
+                            end: checkpoints[i+1].name,
+
+    
+
+        
+
+    
+
+                            steps: -1 // unreachable
+
+    
+
+        
+
+    
+
+                        });
+
+    
+
+        
 
     
 
@@ -356,11 +532,19 @@ export default function SkillTree() {
 
     
 
+        
+
+    
+
                 }
 
     
 
-            }
+        
+
+    
+
+            
 
     
 
@@ -368,39 +552,7 @@ export default function SkillTree() {
 
     
 
-            return { 
-
-    
-
-                nodes: calculatedNodes, 
-
-    
-
-                connections: calculatedConnections, 
-
-    
-
-                pathSet, 
-
-    
-
-                pathNodes,
-
-    
-
-                steps: totalSteps,
-
-    
-
-                checkpoints
-
-    
-
-            };
-
-    
-
-          }, [data]);
+                return { 
 
     
 
@@ -408,47 +560,7 @@ export default function SkillTree() {
 
     
 
-          if (loading) return (
-
-    
-
-            <div className="flex flex-col items-center justify-center h-screen bg-black text-white">
-
-    
-
-              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-yellow-500 mb-4"></div>
-
-    
-
-              <div className="text-xl font-serif">Loading Skill Tree...</div>
-
-    
-
-            </div>
-
-    
-
-          );
-
-    
-
-          if (!data) return (
-
-    
-
-            <div className="flex items-center justify-center h-screen bg-black text-red-500">
-
-    
-
-              Error loading data. Make sure public/data.json exists.
-
-    
-
-            </div>
-
-    
-
-          );
+                    nodes: calculatedNodes, 
 
     
 
@@ -456,47 +568,379 @@ export default function SkillTree() {
 
     
 
-          return (
+                    connections: calculatedConnections, 
 
     
 
-            <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
+        
 
     
 
-               <div className="absolute top-4 left-4 z-50 bg-gray-900/90 border border-yellow-600 text-yellow-500 p-4 rounded shadow-lg backdrop-blur-sm max-w-md">
+                    pathSet, 
 
     
 
-                  <h2 className="text-lg font-bold mb-2">Grand Tour</h2>
+        
 
     
 
-                  <div className="text-sm text-gray-300 flex flex-wrap gap-2 items-center">
+                    pathNodes,
 
     
 
-                      {checkpoints.map((cp, i) => (
+        
 
     
 
-                          <React.Fragment key={cp.id}>
+                    steps: totalSteps,
 
     
 
-                              <span className="text-white font-semibold">{cp.name}</span>
+        
 
     
 
-                              {i < checkpoints.length - 1 && <span className="text-gray-500">→</span>}
+                    segments
 
     
 
-                          </React.Fragment>
+        
 
     
 
-                      ))}
+                };
+
+    
+
+        
+
+    
+
+              }, [data]);
+
+    
+
+        
+
+    
+
+            
+
+    
+
+        
+
+    
+
+              if (loading) return (
+
+    
+
+        
+
+    
+
+                <div className="flex flex-col items-center justify-center h-screen bg-black text-white">
+
+    
+
+        
+
+    
+
+                  <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-yellow-500 mb-4"></div>
+
+    
+
+        
+
+    
+
+                  <div className="text-xl font-serif">Loading Skill Tree...</div>
+
+    
+
+        
+
+    
+
+                </div>
+
+    
+
+        
+
+    
+
+              );
+
+    
+
+        
+
+    
+
+              if (!data) return (
+
+    
+
+        
+
+    
+
+                <div className="flex items-center justify-center h-screen bg-black text-red-500">
+
+    
+
+        
+
+    
+
+                  Error loading data. Make sure public/data.json exists.
+
+    
+
+        
+
+    
+
+                </div>
+
+    
+
+        
+
+    
+
+              );
+
+    
+
+        
+
+    
+
+            
+
+    
+
+        
+
+    
+
+              return (
+
+    
+
+        
+
+    
+
+                <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
+
+    
+
+        
+
+    
+
+                   <div className="absolute top-4 left-4 z-50 bg-gray-900/90 border border-yellow-600 text-yellow-500 p-4 rounded shadow-lg backdrop-blur-sm max-w-md max-h-[80vh] overflow-y-auto">
+
+    
+
+        
+
+    
+
+                      <h2 className="text-lg font-bold mb-2">Grand Tour</h2>
+
+    
+
+        
+
+    
+
+                      
+
+    
+
+        
+
+    
+
+                      <div className="flex flex-col space-y-2">
+
+    
+
+        
+
+    
+
+                        {segments.map((seg, i) => (
+
+    
+
+        
+
+    
+
+                            <div key={i} className="flex items-center text-sm">
+
+    
+
+        
+
+    
+
+                                <div className="flex flex-col">
+
+    
+
+        
+
+    
+
+                                    <span className="text-white font-semibold">{seg.start}</span>
+
+    
+
+        
+
+    
+
+                                    <div className="h-4 border-l border-dashed border-gray-500 ml-2 my-1"></div>
+
+    
+
+        
+
+    
+
+                                    <span className="text-white font-semibold">{seg.end}</span>
+
+    
+
+        
+
+    
+
+                                </div>
+
+    
+
+        
+
+    
+
+                                <div className="ml-4 text-cyan-400 font-mono text-lg font-bold">
+
+    
+
+        
+
+    
+
+                                    {seg.steps >= 0 ? `${seg.steps} steps` : 'Unreachable'}
+
+    
+
+        
+
+    
+
+                                </div>
+
+    
+
+        
+
+    
+
+                            </div>
+
+    
+
+        
+
+    
+
+                        ))}
+
+    
+
+        
+
+    
+
+                      </div>
+
+    
+
+        
+
+    
+
+            
+
+    
+
+        
+
+    
+
+                      <div className="border-t border-gray-700 mt-4 pt-2">
+
+    
+
+        
+
+    
+
+                        <div className="text-xl font-bold text-white text-right">{steps} Total Steps</div>
+
+    
+
+        
+
+    
+
+                      </div>
+
+    
+
+        
+
+    
+
+                      
+
+    
+
+        
+
+    
+
+                      <div className="text-xs text-red-400 mt-2 italic border-t border-gray-800 pt-2">
+
+    
+
+        
+
+    
+
+                        (Ballistics & Intuition not found in 3.15 data)
+
+    
+
+        
+
+    
+
+                      </div>
+
+    
+
+        
 
     
 
@@ -504,15 +948,11 @@ export default function SkillTree() {
 
     
 
-                  <div className="text-xl font-bold mt-2 text-white">{steps > 0 ? `${steps} Total Steps` : 'Path Incomplete'}</div>
+        
 
     
 
-                  <div className="text-xs text-red-400 mt-1 italic">(Ballistics & Intuition not found in 3.15 data)</div>
-
-    
-
-              </div>
+            
 
     
 
