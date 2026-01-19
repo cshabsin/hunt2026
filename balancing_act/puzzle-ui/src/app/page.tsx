@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import initialData from '@/data.json';
 import { parsePuzzle, ClueNode } from '@/utils/puzzleParser';
 
@@ -18,27 +18,74 @@ const DEPTH_COLORS = [
   { bg: 'bg-fuchsia-50', border: 'border-fuchsia-200', ring: 'ring-fuchsia-300' },
 ];
 
+function getAllIds(node: ClueNode): string[] {
+    let ids = [node.id];
+    for (const seg of node.segments) {
+        if (typeof seg !== 'string') {
+            ids = [...ids, ...getAllIds(seg)];
+        }
+    }
+    return ids;
+}
+
 export default function Home() {
   const { root, initialAnswers } = useMemo(() => {
     return parsePuzzle(initialData);
   }, []);
 
+  const allNodeIds = useMemo(() => getAllIds(root), [root]);
+
   const [answers, setAnswers] = useState<Record<string, string>>(initialAnswers);
+  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
 
   const handleAnswerChange = (id: string, value: string) => {
     setAnswers(prev => ({
       ...prev,
       [id]: value
     }));
+    // Auto-expand on type
+    setExpandedNodes(prev => {
+        const next = new Set(prev);
+        next.add(id);
+        return next;
+    });
   };
+
+  const toggleExpand = useCallback((id: string, expanded: boolean) => {
+      setExpandedNodes(prev => {
+          const next = new Set(prev);
+          if (expanded) next.add(id);
+          else next.delete(id);
+          return next;
+      });
+  }, []);
+
+  const expandAll = () => setExpandedNodes(new Set(allNodeIds));
+  const collapseAll = () => setExpandedNodes(new Set());
 
   return (
     <main className="min-h-screen p-8 bg-gray-50 text-gray-900 font-sans">
-      <header className="mb-8 sticky top-0 bg-gray-50 z-20 py-4 border-b">
-        <h1 className="text-3xl font-bold">Bracket City Solver</h1>
-        <p className="text-gray-600 text-sm">
-          Solve inner clues to reveal outer clues.
-        </p>
+      <header className="mb-8 sticky top-0 bg-gray-50 z-20 py-4 border-b flex justify-between items-center">
+        <div>
+            <h1 className="text-3xl font-bold">Balancing Act</h1>
+            <p className="text-gray-600 text-sm">
+            Solve inner clues to reveal outer clues.
+            </p>
+        </div>
+        <div className="space-x-2">
+            <button 
+                onClick={expandAll}
+                className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm font-medium"
+            >
+                Expand All
+            </button>
+            <button 
+                onClick={collapseAll}
+                className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm font-medium"
+            >
+                Collapse All
+            </button>
+        </div>
       </header>
 
       <div className="max-w-4xl mx-auto space-y-4">
@@ -54,6 +101,8 @@ export default function Home() {
                  answers={answers} 
                  onAnswerChange={handleAnswerChange}
                  depth={0} 
+                 expandedNodes={expandedNodes}
+                 onToggleExpand={toggleExpand}
                />
              );
           }
@@ -63,15 +112,17 @@ export default function Home() {
   );
 }
 
-function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: { 
+function ClueNodeView({ node, answers, onAnswerChange, depth = 0, expandedNodes, onToggleExpand }: { 
   node: ClueNode, 
   answers: Record<string, string>, 
   onAnswerChange: (id: string, val: string) => void,
-  depth: number
+  depth: number,
+  expandedNodes: Set<string>,
+  onToggleExpand: (id: string, expanded: boolean) => void
 }) {
   const answer = answers[node.id];
   const hasAnswer = !!answer && answer.trim().length > 0;
-  const [isExpanded, setIsExpanded] = useState(false);
+  const isExpanded = expandedNodes.has(node.id);
   
   // Get colors based on depth
   const colors = DEPTH_COLORS[depth % DEPTH_COLORS.length];
@@ -87,7 +138,7 @@ function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: {
         `}
         onClick={(e) => {
           e.stopPropagation();
-          setIsExpanded(true);
+          onToggleExpand(node.id, true);
         }}
       >
         <span className="text-green-800 font-bold font-mono text-sm">{answer}</span>
@@ -109,7 +160,7 @@ function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: {
         onClick={(e) => {
           if (hasAnswer) {
             e.stopPropagation();
-            setIsExpanded(false);
+            onToggleExpand(node.id, false);
           }
         }}
       >
@@ -128,7 +179,7 @@ function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: {
               onClick={(e) => {
                 if (hasAnswer) {
                   e.stopPropagation();
-                  setIsExpanded(false);
+                  onToggleExpand(node.id, false);
                 }
               }}
             >
@@ -143,6 +194,8 @@ function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: {
               answers={answers} 
               onAnswerChange={onAnswerChange}
               depth={depth + 1}
+              expandedNodes={expandedNodes}
+              onToggleExpand={onToggleExpand}
             />
           );
         }
@@ -157,11 +210,10 @@ function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: {
         value={answer || ''}
         onChange={(e) => {
           onAnswerChange(node.id, e.target.value);
-          setIsExpanded(true);
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && hasAnswer) {
-            setIsExpanded(false);
+            onToggleExpand(node.id, false);
           }
         }}
         className={`
@@ -178,7 +230,7 @@ function ClueNodeView({ node, answers, onAnswerChange, depth = 0 }: {
         onClick={(e) => {
           if (hasAnswer) {
             e.stopPropagation();
-            setIsExpanded(false);
+            onToggleExpand(node.id, false);
           }
         }}
       >
