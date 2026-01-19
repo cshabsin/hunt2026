@@ -75,14 +75,16 @@ cat > "$DIST_DIR/index.html" <<EOF
         <li>
             <a href="skilldrasil/">Skilldrasil</a>
             <p>Interactive Skill Tree Visualization</p>
+            <p style="color: red; font-weight: bold; margin-top: 0.25rem;">Warning: This tool may reveal spoilers for the puzzle.</p>
         </li>
         <li>
-            <a href="physics/">Physics</a>
+            <a href="physics/">The Physics of Linguistic Fracture</a>
             <p>Graph Viewer (Physics Module)</p>
+            <p style="color: red; font-weight: bold; margin-top: 0.25rem;">Warning: This tool may reveal spoilers for the puzzle.</p>
         </li>
         <li>
             <a href="mass_confusion/">Mass Confusion</a>
-            <p>Cambridge Map Overlay Tool</p>
+            <p>Map Overlay Tool</p>
         </li>
     </ul>
 </body>
