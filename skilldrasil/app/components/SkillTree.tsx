@@ -8,6 +8,7 @@ import { getPosition } from '../utils/geometry';
 interface NodeWithPosition extends SkillNode {
   x: number;
   y: number;
+  id: number;
 }
 
 const CANVAS_WIDTH = 22000;

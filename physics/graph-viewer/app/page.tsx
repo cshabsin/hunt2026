@@ -10,6 +10,7 @@ import {
   Background,
   Connection,
   Edge,
+  Node,
   MarkerType,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -38,8 +39,8 @@ type GraphvizJson = {
 };
 
 const GraphViewer = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   useEffect(() => {
     const loadGraph = async () => {

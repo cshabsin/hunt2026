@@ -41,4 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # gemini
-gemini_commit_message.txt
+gemini_commit_message.txtbuild.log
