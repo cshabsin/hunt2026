@@ -41,5 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 # gemini
-gemini_commit_message.txtbuild.log
+gemini_commit_message.txt
+build.log
 docs/
+firebase-debug.log
