@@ -1,9 +1,12 @@
-import SkillTree from "./components/SkillTree";
+import { getGames } from '@/lib/games';
+import GameViewer from '@/components/GameViewer';
 
-export default function Home() {
+export default async function Home() {
+  const games = await getGames();
+
   return (
-    <main className="min-h-screen">
-      <SkillTree />
+    <main className="min-h-screen bg-gray-50">
+      <GameViewer games={games} />
     </main>
   );
 }
