@@ -10,6 +10,11 @@ interface NodeWithPosition extends SkillNode {
   y: number;
 }
 
+const CANVAS_WIDTH = 22000;
+const CANVAS_HEIGHT = 18000;
+const OFFSET_X = CANVAS_WIDTH / 2;
+const OFFSET_Y = CANVAS_HEIGHT / 2;
+
 export default function SkillTree() {
   const [data, setData] = useState<SkillTreeData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -34,12 +39,9 @@ export default function SkillTree() {
     const calculatedNodes: NodeWithPosition[] = [];
     const calculatedConnections: { x1: number; y1: number; x2: number; y2: number; key: string }[] = [];
 
-    const CANVAS_WIDTH = 22000;
-    const CANVAS_HEIGHT = 18000;
-    const OFFSET_X = CANVAS_WIDTH / 2;
-    const OFFSET_Y = CANVAS_HEIGHT / 2;
-
     // 1. Calculate positions
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
     Object.entries(data.nodes).forEach(([id, node]) => {
         // Skip root or nodes without group
         const groupId = node.group;
@@ -47,6 +49,12 @@ export default function SkillTree() {
 
         const pos = getPosition(node, data.groups[groupId], data.constants);
         
+        // Update bounds for debug
+        minX = Math.min(minX, pos.x);
+        minY = Math.min(minY, pos.y);
+        maxX = Math.max(maxX, pos.x);
+        maxY = Math.max(maxY, pos.y);
+
         // Apply offset to center the tree in the positive coordinate space
         const x = pos.x + OFFSET_X;
         const y = pos.y + OFFSET_Y;
@@ -55,6 +63,14 @@ export default function SkillTree() {
         nodesMap.set(id, nodeWithPos);
         calculatedNodes.push(nodeWithPos);
     });
+
+    console.log(`[SkillTree] Calculated ${calculatedNodes.length} nodes.`);
+    console.log(`[SkillTree] Bounds (Original): X[${minX.toFixed(0)}, ${maxX.toFixed(0)}] Y[${minY.toFixed(0)}, ${maxY.toFixed(0)}]`);
+    console.log(`[SkillTree] Canvas Size: ${CANVAS_WIDTH}x${CANVAS_HEIGHT}`);
+    
+    if (calculatedNodes.length > 0) {
+        console.log(`[SkillTree] Sample Node 0:`, calculatedNodes[0]);
+    }
 
     // 2. Calculate connections
     const seenConnections = new Set<string>();
@@ -82,7 +98,7 @@ export default function SkillTree() {
         }
     });
 
-    return { nodes: calculatedNodes, connections: calculatedConnections, width: CANVAS_WIDTH, height: CANVAS_HEIGHT };
+    return { nodes: calculatedNodes, connections: calculatedConnections };
   }, [data]);
 
   if (loading) return (
@@ -98,7 +114,10 @@ export default function SkillTree() {
   );
 
   return (
-    <div className="w-full h-screen bg-black overflow-hidden">
+    <div className="w-full h-screen bg-gray-900 overflow-hidden border-4 border-red-500 relative">
+      <div className="absolute top-0 left-0 z-50 bg-white text-black p-2 opacity-75">
+          Debug: {nodes.length} nodes loaded. Map size: {CANVAS_WIDTH}x{CANVAS_HEIGHT}.
+      </div>
       <TransformWrapper
         initialScale={0.2}
         minScale={0.05}
@@ -108,12 +127,13 @@ export default function SkillTree() {
       >
         <TransformComponent wrapperClass="w-full h-full" contentClass="w-full h-full">
             <div style={{ 
-                width: nodes.length ? 22000 : '100%', 
-                height: nodes.length ? 18000 : '100%', 
+                width: CANVAS_WIDTH, 
+                height: CANVAS_HEIGHT, 
                 position: 'relative',
-                background: '#050505' // Very dark bg for contrast
+                background: '#111',
+                overflow: 'visible' // Ensure no clipping
             }}>
-                <svg width="22000" height="18000" className="absolute top-0 left-0 pointer-events-none">
+                <svg width={CANVAS_WIDTH} height={CANVAS_HEIGHT} className="absolute top-0 left-0 pointer-events-none" style={{ zIndex: 1 }}>
                     {connections.map(conn => (
                         <line 
                             key={conn.key}
@@ -121,7 +141,7 @@ export default function SkillTree() {
                             y1={conn.y1} 
                             x2={conn.x2} 
                             y2={conn.y2} 
-                            stroke="#333" 
+                            stroke="#555" 
                             strokeWidth="4" 
                         />
                     ))}
@@ -130,22 +150,17 @@ export default function SkillTree() {
                 {nodes.map(node => (
                     <div
                         key={node.skill || node.id}
-                        className={`absolute rounded-full border border-gray-600 flex items-center justify-center group
-                            ${node.isKeystone ? 'w-16 h-16 bg-red-900 z-20 border-2 border-red-500' : node.isNotable ? 'w-10 h-10 bg-yellow-700 z-10 border-yellow-500' : 'w-4 h-4 bg-gray-800 z-0'}
-                        `}
+                        className="absolute bg-green-500 rounded-full"
                         style={{
                             left: node.x,
                             top: node.y,
-                            transform: 'translate(-50%, -50%)'
+                            width: node.isKeystone ? 40 : (node.isNotable ? 20 : 10),
+                            height: node.isKeystone ? 40 : (node.isNotable ? 20 : 10),
+                            transform: 'translate(-50%, -50%)',
+                            zIndex: 10
                         }}
-                    >
-                         <div className="hidden group-hover:block absolute bottom-full mb-2 p-2 bg-gray-900 text-white text-xs rounded border border-gray-700 whitespace-nowrap z-50 pointer-events-none min-w-[200px]">
-                            <div className="font-bold text-yellow-500 text-sm mb-1">{node.name}</div>
-                            {node.stats?.map((s, i) => <div key={i} className="text-gray-300">{s}</div>)}
-                            {node.isKeystone && <div className="text-red-400 mt-1 text-[10px] uppercase tracking-wider">Keystone</div>}
-                            {node.isNotable && <div className="text-yellow-400 mt-1 text-[10px] uppercase tracking-wider">Notable</div>}
-                         </div>
-                    </div>
+                        title={node.name}
+                    />
                 ))}
             </div>
         </TransformComponent>
