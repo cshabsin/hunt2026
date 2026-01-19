@@ -32,8 +32,8 @@ export default function SkillTree() {
       });
   }, []);
 
-  const { nodes, connections } = useMemo(() => {
-    if (!data) return { nodes: [], connections: [] };
+  const { nodes, connections, pathSet, pathNodes, steps } = useMemo(() => {
+    if (!data) return { nodes: [], connections: [], pathSet: new Set(), pathNodes: new Set(), steps: 0 };
 
     const nodesMap = new Map<string, NodeWithPosition>();
     const calculatedNodes: NodeWithPosition[] = [];
