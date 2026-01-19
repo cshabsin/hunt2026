@@ -259,15 +259,17 @@ export default function GameViewer({ games }: GameViewerProps) {
             </div>
 
             {/* Readout Board Section */}
-            <div className="flex flex-col items-center gap-4">
-                <h2 className="text-xl font-bold text-gray-700">Readout</h2>
-                <div className="py-2">
-                     <GoBoard game={readoutGame} />
+            {mode === 'Solve' && (
+                <div className="flex flex-col items-center gap-4">
+                    <h2 className="text-xl font-bold text-gray-700">Readout</h2>
+                    <div className="py-2">
+                         <GoBoard game={readoutGame} />
+                    </div>
+                     <div className="text-gray-500 italic mt-4">
+                        Accumulated Moves
+                    </div>
                 </div>
-                 <div className="text-gray-500 italic mt-4">
-                    Accumulated Moves
-                </div>
-            </div>
+            )}
         </div>
 
         {mode === 'Brainstorm' && (
