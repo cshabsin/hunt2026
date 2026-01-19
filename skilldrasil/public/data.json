@@ -60527,7 +60527,7 @@
     "skillSprites": {
         "normalActive": [
             {
-                "filename": "skills-0.jpg?e2b6be75ad1c25df0164dd397b2bfc86",
+                "filename": "assets/skills-0.jpg?e2b6be75ad1c25df0164dd397b2bfc86",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/DmgLeech.png": {
                         "x": 0,
@@ -62662,7 +62662,7 @@
                 }
             },
             {
-                "filename": "skills-1.jpg?3ec8358428ff316dc8f8728dc79a0015",
+                "filename": "assets/skills-1.jpg?3ec8358428ff316dc8f8728dc79a0015",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/DmgLeech.png": {
                         "x": 0,
@@ -64797,7 +64797,7 @@
                 }
             },
             {
-                "filename": "skills-2.jpg?f219ad2a1507333763db143876014441",
+                "filename": "assets/skills-2.jpg?f219ad2a1507333763db143876014441",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/DmgLeech.png": {
                         "x": 0,
@@ -66932,7 +66932,7 @@
                 }
             },
             {
-                "filename": "skills-3.jpg?a81fb9de54e797aa8beda65da9a12131",
+                "filename": "assets/skills-3.jpg?a81fb9de54e797aa8beda65da9a12131",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/DmgLeech.png": {
                         "x": 0,
@@ -69069,7 +69069,7 @@
         ],
         "notableActive": [
             {
-                "filename": "skills-0.jpg?e2b6be75ad1c25df0164dd397b2bfc86",
+                "filename": "assets/skills-0.jpg?e2b6be75ad1c25df0164dd397b2bfc86",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/CloakedAgony.png": {
                         "x": 0,
@@ -72326,7 +72326,7 @@
                 }
             },
             {
-                "filename": "skills-1.jpg?3ec8358428ff316dc8f8728dc79a0015",
+                "filename": "assets/skills-1.jpg?3ec8358428ff316dc8f8728dc79a0015",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/CloakedAgony.png": {
                         "x": 0,
@@ -75583,7 +75583,7 @@
                 }
             },
             {
-                "filename": "skills-2.jpg?f219ad2a1507333763db143876014441",
+                "filename": "assets/skills-2.jpg?f219ad2a1507333763db143876014441",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/CloakedAgony.png": {
                         "x": 0,
@@ -78840,7 +78840,7 @@
                 }
             },
             {
-                "filename": "skills-3.jpg?a81fb9de54e797aa8beda65da9a12131",
+                "filename": "assets/skills-3.jpg?a81fb9de54e797aa8beda65da9a12131",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/CloakedAgony.png": {
                         "x": 0,
@@ -82099,7 +82099,7 @@
         ],
         "keystoneActive": [
             {
-                "filename": "skills-0.jpg?e2b6be75ad1c25df0164dd397b2bfc86",
+                "filename": "assets/skills-0.jpg?e2b6be75ad1c25df0164dd397b2bfc86",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.png": {
                         "x": 0,
@@ -82374,7 +82374,7 @@
                 }
             },
             {
-                "filename": "skills-1.jpg?3ec8358428ff316dc8f8728dc79a0015",
+                "filename": "assets/skills-1.jpg?3ec8358428ff316dc8f8728dc79a0015",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.png": {
                         "x": 0,
@@ -82649,7 +82649,7 @@
                 }
             },
             {
-                "filename": "skills-2.jpg?f219ad2a1507333763db143876014441",
+                "filename": "assets/skills-2.jpg?f219ad2a1507333763db143876014441",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.png": {
                         "x": 0,
@@ -82924,7 +82924,7 @@
                 }
             },
             {
-                "filename": "skills-3.jpg?a81fb9de54e797aa8beda65da9a12131",
+                "filename": "assets/skills-3.jpg?a81fb9de54e797aa8beda65da9a12131",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.png": {
                         "x": 0,
@@ -83201,7 +83201,7 @@
         ],
         "normalInactive": [
             {
-                "filename": "skills-disabled-0.jpg?f65d01469ae9c6a24226060798c193bf",
+                "filename": "assets/skills-disabled-0.jpg?f65d01469ae9c6a24226060798c193bf",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/DmgLeech.png": {
                         "x": 0,
@@ -85336,7 +85336,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-1.jpg?724c51abb56efb9238e5ee2d7a3d9ae3",
+                "filename": "assets/skills-disabled-1.jpg?724c51abb56efb9238e5ee2d7a3d9ae3",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/DmgLeech.png": {
                         "x": 0,
@@ -87471,7 +87471,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-2.jpg?5567dd3c3cd56cf6c8442c46d6c72b07",
+                "filename": "assets/skills-disabled-2.jpg?5567dd3c3cd56cf6c8442c46d6c72b07",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/DmgLeech.png": {
                         "x": 0,
@@ -89606,7 +89606,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-3.jpg?896ee80143c1e1820bbfca4707741def",
+                "filename": "assets/skills-disabled-3.jpg?896ee80143c1e1820bbfca4707741def",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/DmgLeech.png": {
                         "x": 0,
@@ -91743,7 +91743,7 @@
         ],
         "notableInactive": [
             {
-                "filename": "skills-disabled-0.jpg?f65d01469ae9c6a24226060798c193bf",
+                "filename": "assets/skills-disabled-0.jpg?f65d01469ae9c6a24226060798c193bf",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/CloakedAgony.png": {
                         "x": 0,
@@ -95000,7 +95000,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-1.jpg?724c51abb56efb9238e5ee2d7a3d9ae3",
+                "filename": "assets/skills-disabled-1.jpg?724c51abb56efb9238e5ee2d7a3d9ae3",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/CloakedAgony.png": {
                         "x": 0,
@@ -98257,7 +98257,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-2.jpg?5567dd3c3cd56cf6c8442c46d6c72b07",
+                "filename": "assets/skills-disabled-2.jpg?5567dd3c3cd56cf6c8442c46d6c72b07",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/CloakedAgony.png": {
                         "x": 0,
@@ -101514,7 +101514,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-3.jpg?896ee80143c1e1820bbfca4707741def",
+                "filename": "assets/skills-disabled-3.jpg?896ee80143c1e1820bbfca4707741def",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/Berserker/CloakedAgony.png": {
                         "x": 0,
@@ -104773,7 +104773,7 @@
         ],
         "keystoneInactive": [
             {
-                "filename": "skills-disabled-0.jpg?f65d01469ae9c6a24226060798c193bf",
+                "filename": "assets/skills-disabled-0.jpg?f65d01469ae9c6a24226060798c193bf",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.png": {
                         "x": 0,
@@ -105048,7 +105048,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-1.jpg?724c51abb56efb9238e5ee2d7a3d9ae3",
+                "filename": "assets/skills-disabled-1.jpg?724c51abb56efb9238e5ee2d7a3d9ae3",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.png": {
                         "x": 0,
@@ -105323,7 +105323,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-2.jpg?5567dd3c3cd56cf6c8442c46d6c72b07",
+                "filename": "assets/skills-disabled-2.jpg?5567dd3c3cd56cf6c8442c46d6c72b07",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.png": {
                         "x": 0,
@@ -105598,7 +105598,7 @@
                 }
             },
             {
-                "filename": "skills-disabled-3.jpg?896ee80143c1e1820bbfca4707741def",
+                "filename": "assets/skills-disabled-3.jpg?896ee80143c1e1820bbfca4707741def",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/KeystoneResoluteTechnique.png": {
                         "x": 0,
@@ -105875,7 +105875,7 @@
         ],
         "mastery": [
             {
-                "filename": "groups-0.png?6920104def8b39aea8bbb29344940904",
+                "filename": "assets/groups-0.png?6920104def8b39aea8bbb29344940904",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/ElementalMastery2.png": {
                         "x": 0,
@@ -106474,7 +106474,7 @@
                 }
             },
             {
-                "filename": "groups-1.png?832577d8939b3d53a66cbfbd82067f6c",
+                "filename": "assets/groups-1.png?832577d8939b3d53a66cbfbd82067f6c",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/ElementalMastery2.png": {
                         "x": 0,
@@ -107073,7 +107073,7 @@
                 }
             },
             {
-                "filename": "groups-2.png?47322f6283815a3956a4d0f5a41f519d",
+                "filename": "assets/groups-2.png?47322f6283815a3956a4d0f5a41f519d",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/ElementalMastery2.png": {
                         "x": 0,
@@ -107672,7 +107672,7 @@
                 }
             },
             {
-                "filename": "groups-3.png?7bd45ef2fa23c36073251d1e34ab10e4",
+                "filename": "assets/groups-3.png?7bd45ef2fa23c36073251d1e34ab10e4",
                 "coords": {
                     "Art/2DArt/SkillIcons/passives/ElementalMastery2.png": {
                         "x": 0,
