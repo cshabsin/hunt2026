@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Game, Stone } from '@/lib/games';
 import GoBoard from './GoBoard';
-import { ChevronLeft, ChevronRight, Play, Square } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Square, Lightbulb, Puzzle } from 'lucide-react';
 import { nextGeneration } from '@/lib/gameOfLife';
 
 interface GameViewerProps {
@@ -14,11 +14,15 @@ interface UserMove extends Stone {
   color: 'Black' | 'White';
 }
 
+type Mode = 'Brainstorm' | 'Solve';
+
 export default function GameViewer({ games }: GameViewerProps) {
   const [index, setIndex] = useState(0);
+  const [mode, setMode] = useState<Mode>('Brainstorm');
   const [golMode, setGolMode] = useState<'Black' | 'White' | null>(null);
   const [golCells, setGolCells] = useState<Stone[]>([]);
   const [userMoves, setUserMoves] = useState<UserMove[]>([]);
+  const [replayIndex, setReplayIndex] = useState(0); // For Solve mode
   const [generation, setGeneration] = useState(0);
   const golCellsRef = React.useRef(golCells);
 
@@ -26,12 +30,13 @@ export default function GameViewer({ games }: GameViewerProps) {
       golCellsRef.current = golCells;
   }, [golCells]);
 
-  // Reset GOL when changing games
+  // Reset state when changing games
   const handleIndexChange = useCallback((newIndex: number) => {
       setIndex(newIndex);
       setGolMode(null);
       setUserMoves([]);
       setGeneration(0);
+      setReplayIndex(0);
   }, []);
 
   useEffect(() => {
@@ -67,22 +72,40 @@ export default function GameViewer({ games }: GameViewerProps) {
       return () => clearInterval(interval);
   }, [golMode]);
 
+  const baseGame = games[index];
+
+  // Interleave moves for Solve mode replay
+  const orderedMoves = useMemo(() => {
+      const moves: UserMove[] = [];
+      const len = Math.max(baseGame.black.length, baseGame.white.length);
+      for (let i = 0; i < len; i++) {
+          if (i < baseGame.black.length) moves.push({ ...baseGame.black[i], color: 'Black' });
+          if (i < baseGame.white.length) moves.push({ ...baseGame.white[i], color: 'White' });
+      }
+      return moves;
+  }, [baseGame]);
+
   const startGameOfLife = (color: 'Black' | 'White') => {
       if (golMode === color) {
           setGolMode(null);
-          // If we stop, we might want to keep the nextMove? Or reset?
-          // Resetting nextMove is safest as the board state is reset.
           setUserMoves([]);
           setGeneration(0);
           return;
       }
       
-      const baseCells = color === 'Black' ? games[index].black : games[index].white;
-      let initialCells = [...baseCells];
-      
-      // Include user moves that match the color being played
-      const relevantUserMoves = userMoves.filter(m => m.color === color);
-      initialCells = [...initialCells, ...relevantUserMoves];
+      let initialCells: Stone[] = [];
+
+      if (mode === 'Solve') {
+          // In Solve mode, use the visible stones from replay
+          const visibleMoves = orderedMoves.slice(0, replayIndex);
+          initialCells = visibleMoves.filter(m => m.color === color);
+      } else {
+          // In Brainstorm mode, use base game + user moves
+          const baseCells = color === 'Black' ? baseGame.black : baseGame.white;
+          initialCells = [...baseCells];
+          const relevantUserMoves = userMoves.filter(m => m.color === color);
+          initialCells = [...initialCells, ...relevantUserMoves];
+      }
       
       setGolCells(initialCells);
       setGolMode(color);
@@ -91,10 +114,19 @@ export default function GameViewer({ games }: GameViewerProps) {
   
   const handleBoardClick = (x: number, y: number) => {
       if (golMode) return;
+
+      if (mode === 'Solve') {
+          // In Solve mode, clicking advances the replay
+          if (replayIndex < orderedMoves.length) {
+              setReplayIndex(prev => prev + 1);
+          }
+          return;
+      }
       
+      // Brainstorm Mode Logic
       const isOccupiedByBase = 
-          games[index].black.some(s => s.x === x && s.y === y) ||
-          games[index].white.some(s => s.x === x && s.y === y);
+          baseGame.black.some(s => s.x === x && s.y === y) ||
+          baseGame.white.some(s => s.x === x && s.y === y);
       
       if (isOccupiedByBase) return;
       
@@ -114,7 +146,7 @@ export default function GameViewer({ games }: GameViewerProps) {
       if (userMoves.length > 0) {
           nextColor = userMoves[userMoves.length - 1].color === 'Black' ? 'White' : 'Black';
       } else {
-          nextColor = games[index].toPlay;
+          nextColor = baseGame.toPlay;
       }
 
       setUserMoves(prev => [...prev, { x, y, color: nextColor }]);
@@ -124,8 +156,6 @@ export default function GameViewer({ games }: GameViewerProps) {
     return <div>No games found.</div>;
   }
 
-  const baseGame = games[index];
-  
   let displayGame: Game;
   
   if (golMode) {
@@ -134,7 +164,20 @@ export default function GameViewer({ games }: GameViewerProps) {
           white: golMode === 'White' ? golCells : [],
           toPlay: baseGame.toPlay
       };
+  } else if (mode === 'Solve') {
+      const visibleMoves = orderedMoves.slice(0, replayIndex);
+      const black = visibleMoves.filter(m => m.color === 'Black');
+      const white = visibleMoves.filter(m => m.color === 'White');
+      
+      // Determine next to play in replay sequence
+      let nextToPlay = baseGame.toPlay;
+      if (replayIndex < orderedMoves.length) {
+          nextToPlay = orderedMoves[replayIndex].color;
+      }
+
+      displayGame = { black, white, toPlay: nextToPlay };
   } else {
+      // Brainstorm Mode
       const black = [...baseGame.black, ...userMoves.filter(m => m.color === 'Black')];
       const white = [...baseGame.white, ...userMoves.filter(m => m.color === 'White')];
       
@@ -143,16 +186,40 @@ export default function GameViewer({ games }: GameViewerProps) {
           nextToPlay = userMoves[userMoves.length - 1].color === 'Black' ? 'White' : 'Black';
       }
 
-      displayGame = {
-          black,
-          white,
-          toPlay: nextToPlay
-      };
+      displayGame = { black, white, toPlay: nextToPlay };
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-6 p-4">
-        <h1 className="text-3xl font-bold text-gray-800">Go Game Viewer</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Pursuit of Liberty</h1>
+        <p className="text-red-500 font-medium -mt-4">
+            Warning: Clicking through games may reveal spoilers.
+        </p>
+
+        {/* Mode Toggle */}
+        <div className="flex bg-gray-200 p-1 rounded-lg">
+            <button
+                onClick={() => setMode('Brainstorm')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
+                    mode === 'Brainstorm' ? 'bg-white shadow text-black' : 'text-gray-600 hover:text-black'
+                }`}
+            >
+                <Lightbulb size={18} />
+                Brainstorm
+            </button>
+            <button
+                onClick={() => {
+                    setMode('Solve');
+                    setReplayIndex(0); // Reset replay when switching to Solve
+                }}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
+                    mode === 'Solve' ? 'bg-white shadow text-black' : 'text-gray-600 hover:text-black'
+                }`}
+            >
+                <Puzzle size={18} />
+                Solve
+            </button>
+        </div>
         
         <div className="flex items-center gap-4">
             <button
