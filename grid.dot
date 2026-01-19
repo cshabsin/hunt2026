@@ -1,0 +1,57 @@
+digraph Grid {
+    // Basic settings
+    layout=dot
+    nodesep=0.5
+    ranksep=0.5
+    mclimit=5.0 // increased from default 1.0 to try harder to minimize crossings
+    remincross=true // runs mincross an additional time
+    
+    // Default node style
+    node [shape=rect, style=filled, color=lightblue];
+
+    // Highlighted nodes
+    node [fillcolor=yellow];
+    "pert"; "ding"; "loan"; "tank"; "clam"; "lite"; "out"; "cat"; "any"; "tamer"; "wire"; "assist"; "met"; "gore"; 
+    "back"; "step"; "party"; "dart"; "monks"; "ab"; "day"; "piece"; "crow"; "den"; "down"; "eye"; "field"; "lesser";
+    "racks"; "term"; "well"; "wink"
+    
+    // Reset to default for subsequent nodes if needed, or just let them use the default
+    node [fillcolor=lightblue];
+
+    "day" -> "break" -> "out";
+    "break" -> "fast" -> "track" -> "bed";
+    "bar" -> "bed";
+    "crow" -> "bar" -> "racks";
+    "fast" -> "lane" -> "assist";
+    "tamer" -> "lane";
+    "cat" -> "hay" -> "wire";
+    "hay" -> "maker";
+    "bed" -> "evil";
+    "track" -> "record" -> "label" -> "maker" -> "bot";
+    "ab" -> "bot" -> "any";
+    "clam" -> "bake" -> "off" -> "label";
+    "bake" -> "lite";
+    "off" -> "spring" -> "field";
+    "record" -> "scratch" -> "pad";
+    "well" -> "spring";
+    "term" -> "paper" -> "back";
+    "loan" -> "shark" -> "tank";
+    "paper" -> "tiger" -> "shark";
+    "tiger" -> "lily" -> "pad";
+    "lily" -> "knight";
+    "pert" -> "wee" -> "knight" -> "hood";
+    "monks" -> "hood";
+    "wee" -> "ding";
+    "den" -> "mark" -> "et" -> "al" -> "gore";
+    "met" -> "al";
+    "mark" -> "down";
+    "step" -> "hen" -> "party";
+    "hen" -> "dry";
+    "dart" -> "mouth" -> "piece";
+    "dry" -> "mouth";
+    "hood" -> "wink";
+    "lesser" -> "evil" -> "eye";
+
+    "dry" -> "dock" -> "et";
+    "pad" -> "dock";
+}
