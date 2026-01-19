@@ -45,7 +45,7 @@ const GraphViewer = () => {
   useEffect(() => {
     const loadGraph = async () => {
       try {
-        const response = await fetch('/grid.json');
+        const response = await fetch('grid.json');
         const data: GraphvizJson = await response.json();
 
         // Map GVID to Name for easier edge creation

@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
 export default function Home() {
-  const [mapImage, setMapImage] = useState("/mit_campus.png");
+  const [mapImage, setMapImage] = useState("mit_campus.png");
 
   const [transform, setTransform] = useState({
     x: 0,
@@ -115,8 +115,8 @@ export default function Home() {
               onChange={(e) => setMapImage(e.target.value)}
               className="w-full p-2 border rounded text-sm text-black"
             >
-              <option value="/mit_campus.png">MIT Campus</option>
-              <option value="/cambridge_map.png">City of Cambridge</option>
+              <option value="mit_campus.png">MIT Campus</option>
+              <option value="cambridge_map.png">City of Cambridge</option>
             </select>
           </div>
 
@@ -270,7 +270,7 @@ export default function Home() {
           >
              {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
-              src="/overlay.svg" 
+              src="overlay.svg"
               alt="Overlay"
               className="pointer-events-none select-none"
               // The SVG has intrinsic size 1200x600. 
