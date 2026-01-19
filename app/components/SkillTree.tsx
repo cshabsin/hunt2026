@@ -32,8 +32,8 @@ export default function SkillTree() {
       });
   }, []);
 
-  const { nodes, connections, pathSet, pathNodes, steps } = useMemo(() => {
-    if (!data) return { nodes: [], connections: [], pathSet: new Set(), pathNodes: new Set(), steps: 0 };
+  const { nodes, connections, pathSet, pathNodes, steps, checkpoints } = useMemo(() => {
+    if (!data) return { nodes: [], connections: [], pathSet: new Set(), pathNodes: new Set(), steps: 0, checkpoints: [] };
 
     const nodesMap = new Map<string, NodeWithPosition>();
     const calculatedNodes: NodeWithPosition[] = [];
@@ -152,139 +152,379 @@ export default function SkillTree() {
 
     
 
-        // 3. Find Shortest Path (BFS)
-
-        const startNodeId = 52031; // Disintegration
-
-        const endNodeId = 52714;   // Prowess
-
-        const pathSet = new Set<string>();
-
-        const pathNodes = new Set<number>();
-
-        let steps = 0;
+            // 3. Find Shortest Path (BFS) for Sequence
 
     
 
-        const queue: { id: number; path: number[] }[] = [{ id: startNodeId, path: [startNodeId] }];
-
-        const visited = new Set<number>();
-
-        visited.add(startNodeId);
+            const checkpoints = [
 
     
 
-        while (queue.length > 0) {
+                { id: 52714, name: "Prowess" },
 
-            const { id, path } = queue.shift()!;
+    
 
-            if (id === endNodeId) {
+                // { id: ???, name: "Ballistics" }, // Not found
 
-                steps = path.length - 1; // Steps = edges, not nodes
+    
 
-                path.forEach(nodeId => pathNodes.add(nodeId));
+                // { id: ???, name: "Intuition" }, // Not found
+
+    
+
+                { id: 52157, name: "Soul Siphon" },
+
+    
+
+                { id: 60737, name: "Sleight of Hand" },
+
+    
+
+                { id: 51212, name: "Entropy" },
+
+    
+
+                { id: 56029, name: "Agility" }
+
+    
+
+            ];
+
+    
+
+        
+
+    
+
+            const pathSet = new Set<string>();
+
+    
+
+            const pathNodes = new Set<number>();
+
+    
+
+            let totalSteps = 0;
+
+    
+
+        
+
+    
+
+            // Helper for single segment BFS
+
+    
+
+            const findSegment = (start: number, end: number) => {
+
+    
+
+                const queue: { id: number; path: number[] }[] = [{ id: start, path: [start] }];
+
+    
+
+                const visited = new Set<number>();
+
+    
+
+                visited.add(start);
+
+    
 
                 
 
-                // Create connection keys for the path
+    
 
-                for (let i = 0; i < path.length - 1; i++) {
+                while (queue.length > 0) {
 
-                    const n1 = path[i];
+    
 
-                    const n2 = path[i+1];
+                    const { id, path } = queue.shift()!;
 
-                    pathSet.add(`${Math.min(n1, n2)}-${Math.max(n1, n2)}`);
+    
+
+                    if (id === end) {
+
+    
+
+                        return path;
+
+    
+
+                    }
+
+    
+
+                    
+
+    
+
+                    const neighbors = adjacency.get(id) || [];
+
+    
+
+                    for (const neighbor of neighbors) {
+
+    
+
+                        if (!visited.has(neighbor)) {
+
+    
+
+                            visited.add(neighbor);
+
+    
+
+                            queue.push({ id: neighbor, path: [...path, neighbor] });
+
+    
+
+                        }
+
+    
+
+                    }
+
+    
 
                 }
 
-                break;
+    
+
+                return null;
+
+    
+
+            };
+
+    
+
+        
+
+    
+
+            for (let i = 0; i < checkpoints.length - 1; i++) {
+
+    
+
+                const start = checkpoints[i].id;
+
+    
+
+                const end = checkpoints[i + 1].id;
+
+    
+
+                const segmentPath = findSegment(start, end);
+
+    
+
+                
+
+    
+
+                if (segmentPath) {
+
+    
+
+                    totalSteps += segmentPath.length - 1;
+
+    
+
+                    segmentPath.forEach(nodeId => pathNodes.add(nodeId));
+
+    
+
+                     for (let j = 0; j < segmentPath.length - 1; j++) {
+
+    
+
+                        const n1 = segmentPath[j];
+
+    
+
+                        const n2 = segmentPath[j+1];
+
+    
+
+                        pathSet.add(`${Math.min(n1, n2)}-${Math.max(n1, n2)}`);
+
+    
+
+                    }
+
+    
+
+                }
+
+    
 
             }
 
     
 
-            const neighbors = adjacency.get(id) || [];
-
-            for (const neighbor of neighbors) {
-
-                if (!visited.has(neighbor)) {
-
-                    visited.add(neighbor);
-
-                    queue.push({ id: neighbor, path: [...path, neighbor] });
-
-                }
-
-            }
-
-        }
+        
 
     
 
-        return { 
-
-            nodes: calculatedNodes, 
-
-            connections: calculatedConnections, 
-
-            pathSet, 
-
-            pathNodes,
-
-            steps 
-
-        };
-
-      }, [data]);
+            return { 
 
     
 
-      if (loading) return (
-
-        <div className="flex flex-col items-center justify-center h-screen bg-black text-white">
-
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-yellow-500 mb-4"></div>
-
-          <div className="text-xl font-serif">Loading Skill Tree...</div>
-
-        </div>
-
-      );
-
-      if (!data) return (
-
-        <div className="flex items-center justify-center h-screen bg-black text-red-500">
-
-          Error loading data. Make sure public/data.json exists.
-
-        </div>
-
-      );
+                nodes: calculatedNodes, 
 
     
 
-      return (
+                connections: calculatedConnections, 
 
-        <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
+    
 
-           <div className="absolute top-4 left-4 z-50 bg-gray-900/90 border border-yellow-600 text-yellow-500 p-4 rounded shadow-lg backdrop-blur-sm">
+                pathSet, 
 
-              <h2 className="text-lg font-bold mb-2">Pathfinding</h2>
+    
 
-              <div className="text-sm text-gray-300">
+                pathNodes,
 
-                  <span className="text-white font-semibold">Disintegration</span> → <span className="text-white font-semibold">Prowess</span>
+    
+
+                steps: totalSteps,
+
+    
+
+                checkpoints
+
+    
+
+            };
+
+    
+
+          }, [data]);
+
+    
+
+        
+
+    
+
+          if (loading) return (
+
+    
+
+            <div className="flex flex-col items-center justify-center h-screen bg-black text-white">
+
+    
+
+              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-yellow-500 mb-4"></div>
+
+    
+
+              <div className="text-xl font-serif">Loading Skill Tree...</div>
+
+    
+
+            </div>
+
+    
+
+          );
+
+    
+
+          if (!data) return (
+
+    
+
+            <div className="flex items-center justify-center h-screen bg-black text-red-500">
+
+    
+
+              Error loading data. Make sure public/data.json exists.
+
+    
+
+            </div>
+
+    
+
+          );
+
+    
+
+        
+
+    
+
+          return (
+
+    
+
+            <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
+
+    
+
+               <div className="absolute top-4 left-4 z-50 bg-gray-900/90 border border-yellow-600 text-yellow-500 p-4 rounded shadow-lg backdrop-blur-sm max-w-md">
+
+    
+
+                  <h2 className="text-lg font-bold mb-2">Grand Tour</h2>
+
+    
+
+                  <div className="text-sm text-gray-300 flex flex-wrap gap-2 items-center">
+
+    
+
+                      {checkpoints.map((cp, i) => (
+
+    
+
+                          <React.Fragment key={cp.id}>
+
+    
+
+                              <span className="text-white font-semibold">{cp.name}</span>
+
+    
+
+                              {i < checkpoints.length - 1 && <span className="text-gray-500">→</span>}
+
+    
+
+                          </React.Fragment>
+
+    
+
+                      ))}
+
+    
+
+                  </div>
+
+    
+
+                  <div className="text-xl font-bold mt-2 text-white">{steps > 0 ? `${steps} Total Steps` : 'Path Incomplete'}</div>
+
+    
+
+                  <div className="text-xs text-red-400 mt-1 italic">(Ballistics & Intuition not found in 3.15 data)</div>
+
+    
 
               </div>
 
-              <div className="text-xl font-bold mt-2 text-white">{steps > 0 ? `${steps} Steps` : 'Path not found'}</div>
+    
 
-          </div>
+        
 
     
 
-          <TransformWrapper
+              <TransformWrapper
+
+    
+
+        
 
             initialScale={0.2}
 
