@@ -48,6 +48,7 @@ build_app "balancing_act/puzzle-ui" "balancing_act"
 # Create landing page
 echo "Creating landing page..."
 cp "$ROOT_DIR/index.html" "$DIST_DIR/index.html"
+cp "$ROOT_DIR/styles.css" "$DIST_DIR/styles.css"
 
 # Create .nojekyll to bypass Jekyll processing on GH Pages
 touch "$DIST_DIR/.nojekyll"

@@ -1,0 +1,43 @@
+body {
+    font-family: system-ui, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    line-height: 1.5;
+}
+
+h1 {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+li:hover {
+    background: #f9f9f9;
+    border-color: #bbb;
+}
+
+a {
+    text-decoration: none;
+    color: #0070f3;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: block;
+}
+
+p {
+    color: #666;
+    margin: 0.5rem 0 0;
+}
