@@ -41,3 +41,9 @@ p {
     color: #666;
     margin: 0.5rem 0 0;
 }
+
+.warning {
+    color: red;
+    font-weight: bold;
+    margin-top: 0.25rem;
+}
